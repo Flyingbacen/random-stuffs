@@ -7,3 +7,4 @@ There's currently only one file here, but perhaps that will change-
 
 [ps profile script](./powershell%20profile%20scripts.ps1) -> second function (turtlesong) was not intended to be related to turtle pics, was used for downloading snippets of a stream, and output to ./turtlesongs/
 - first function was more of a test than anything else tbh
+- if they are not in your path, change adb, yt-dlp (or youtube-dl, should work with it too) and ffmpeg to their proper locations. (lines 6, 23, 26 respectively)
