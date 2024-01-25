@@ -1,9 +1,9 @@
 Write-Host 'preset commands'
-# checnge this variable to user dir or something
-$userdirselect = ""
+$userdirselect = "" # change this variable to user dir or something
+# line 6, change adb to adb installation, on line 23, change yt-dlp installation directory and ffmpeg, line 23, 26, ffmpeg installation directory (unless they are in the path)
 function adbappstart {
     param($packageName)
-    $userdirselect\Documents\adb\adb.exe shell monkey -p $packageName -c android.intent.category.LAUNCHER 1
+    adb.exe shell monkey -p $packageName -c android.intent.category.LAUNCHER 1 
 }
 Write-Host 'Command: adbappstart [packageName]'
 function turtlesong {
@@ -15,14 +15,12 @@ function turtlesong {
         [Parameter(Mandatory)]
         [string]$number,
         [string]$topic
-    )
+        )
     if ("$topic" -ne "") {
         $topic = ".($topic)"
     }
-
     if ((Test-Path "$userdirselect\turtlesongs\song.$number$topic.mp4") -eq $false) {
-        $userdirselect\.stacher/youtube-dl --embed-metadata --no-check-certificate --ffmpeg-location C:\Windows\ --download-sections "*$time" -o "$userdirselect\turtlesongs\song.$number$topic.mp4" $link 
-        
+        ytdlp --embed-metadata --no-check-certificate --ffmpeg-location "C:\Windows" --download-sections "*$time" -o "$userdirselect\turtlesongs\song.$number$topic.mp4" $link
         $choice = Read-Host "Use ffmpeg and convert to audio? (y/n)"
         if ($choice -eq "y") {
             ffmpeg -i "$userdirselect\turtlesongs\song.$number$topic.mp4" -vn -c:a copy "$userdirselect\turtlesongs\audio\song.$number$topic.m4a"
