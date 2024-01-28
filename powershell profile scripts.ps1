@@ -32,3 +32,20 @@ function turtlesong {
     }
 }
 Write-Host 'Command: turtlesong -time -link -number'
+function openastrustedinstaller { # requires NtObjectManager module, install with "Install-Module -Name NtObjectManager"
+    param(
+        $application,
+        [switch]$start = $false
+    )
+    $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    if (-not $isAdmin) {
+    Write-Warning -Message 'You need to run this command as an administrator.'
+    return
+    }
+    if ($start) {
+        Start-Service -Name TrustedInstaller
+    }
+    $parent = Get-NtProcess -ServiceName TrustedInstaller
+    New-Win32Process $application -CreationFlags NewConsole -ParentProcess $parent
+}
+Write-Host 'Command: openastrustedinstaller <application> [-start] | Run -start if TrustedInstaller service is not running.'
