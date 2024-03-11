@@ -31,7 +31,7 @@ function turtlesong {
         write-host "Song with number ""$number"" already downloaded."
     }
 }
-Write-Host 'Command: turtlesong -time -link -number'
+Write-Host 'Command: turtlesong -time -link -number [-topic]'
 function openastrustedinstaller { # requires NtObjectManager module, install with "Install-Module -Name NtObjectManager"
     param(
         $application,
