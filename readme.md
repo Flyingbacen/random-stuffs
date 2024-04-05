@@ -8,3 +8,7 @@ There's currently only one file here, but perhaps that will change-
 [ps profile script](./powershell%20profile%20scripts.ps1) -> second function (turtlesong) was not intended to be related to turtle pics, was used for downloading snippets of a stream, and output to ./turtlesongs/
 - first function was more of a test than anything else tbh
 - if they are not in your path, change adb, yt-dlp (or youtube-dl, should work with it too) and ffmpeg to their proper locations. (lines 6, 23, 26 respectively)
+
+[8 ball pool free cure redeem](./8ballpoolredeem.py)
+- Check out my other repository featuring a discord bot! -- [Github Repository](https://github.com/Flyingbacen/Discord-rawrbot)
+- This is just stolen from there, since I'm apparently too lazy to re set it up so that the bot boots with my computer
