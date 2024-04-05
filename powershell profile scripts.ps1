@@ -42,8 +42,20 @@ function openastrustedinstaller { # requires NtObjectManager module, install wit
     Write-Warning -Message 'You need to run this command as an administrator.'
     return
     }
-    if ($start) {
-        Start-Service -Name TrustedInstaller
+    $ServiceName = 'TrustedInstaller'
+    $arrService = Get-Service -Name $ServiceName
+    while ($arrService.Status -ne 'Running')
+    {
+        Start-Service $ServiceName
+        write-host $arrService.status
+        write-host 'Starting TrustedInstaller service automatically, please wait'
+        $arrService.Refresh()
+        if ($arrService.Status -eq 'Running')
+        {
+            Write-Host 'Service is now Running, continuing script'
+        } else {
+            print "An error occurred while starting the service. Please start the service manually and run the script again. current status: ""$arrService.Status"""
+        }
     }
     $parent = Get-NtProcess -ServiceName TrustedInstaller
     New-Win32Process $application -CreationFlags NewConsole -ParentProcess $parent
