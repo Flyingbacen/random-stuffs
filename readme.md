@@ -12,3 +12,6 @@ There's currently only one file here, but perhaps that will change-
 [8 ball pool free cure redeem](./8ballpoolredeem.py)
 - Check out my other repository featuring a discord bot! -- [Github Repository](https://github.com/Flyingbacen/Discord-rawrbot)
 - This is just stolen from there, since I'm apparently too lazy to re set it up so that the bot boots with my computer
+
+[owo auto](./owo%20auto.py) -> made for the owo bot in discord. makes messy blob messages sometimes, shouldn't happen anymore though
+- broken version is broken. make a pull request if you think you can fix it :)
