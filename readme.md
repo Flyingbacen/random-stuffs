@@ -14,3 +14,10 @@ There's currently only one file here, but perhaps that will change-
 
 [owo auto](./owo%20auto.py) -> made for the owo bot in discord. makes messy blob messages sometimes, shouldn't happen anymore though
 - broken version is broken. make a pull request if you think you can fix it :)
+
+[random list](./radom%20list%201-10.py) -> was bored and wanted to see if I could do it
+- easily customizable to however long you want the numbers to go on for
+
+[yes](./yes.py) -> I was bored and didn't know if there was a Windows equivalent
+
+[yt-dlp](./yt-dlp.sh) -> Was too lazy to find where the config file was, and Youtube is special, and for some reason, yt-dlp is missing the --download-sections arguement, so I needed to use ffmpeg.
