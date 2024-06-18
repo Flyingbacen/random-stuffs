@@ -61,3 +61,33 @@ function openastrustedinstaller { # requires NtObjectManager module, install wit
     New-Win32Process $application -CreationFlags NewConsole -ParentProcess $parent
 }
 Write-Host 'Command: openastrustedinstaller <application> [-start] | Run -start if TrustedInstaller service is not running.'
+function demicrosoft {
+    param(
+        [string]$inputfile,
+        [Alias("l")]
+        [switch]$latest = $false, 
+        [switch]$Discord = $false, # Used as $true in script, PS limitation-can't use $true by default
+        [Alias("s")]
+        [switch]$hevc = $false,
+        [switch]$ls = $false,
+        [switch]$gpu = $false,
+        [switch]$copy = $false
+    )
+    if ($ls -eq $true) {
+        $latest = $true
+        $hevc = $true
+    }
+    if ($latest -eq $true) {
+        $inputfile = Get-ChildItem | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 1
+    }
+    if ($inputfile -eq "") {
+        throw 'No input file specified.'
+    }
+    $inputfile = Convert-Path -Path $inputfile
+    $outputfile = $inputfile -replace ".mp4", "-reformed.mp4"
+    if ($discord -eq $true -and (get-item (ffmpeg -i "$inputfile" (if ($hevc -eq $true) return -c:v (if ($gpu -ne $false) return ((($GPU=Get-CimInstance -ClassName CIM_VideoController).AdapterCompatibility) && if ($GPU -eq "NVIDIA") {return hevc_nvenc} elseif ($GPU -eq "Intel") {return hevc_qsv} elseif ($GPU -eq "AMD") {return hevc_amf} else {return hevc})) else {return hevc}) "$outputfile").Length -gt 26214400 (rem "26214400 = 25MB")) -and (Read-Host "File is larger than 25MB. Trim 5 seconds? (y/n)") -eq "y") {ffmpeg -i "$outputfile" -ss 5 -c copy ($outputfile -replace ".mp4", "-cut.mp4") && Remove-Item $outputfile}
+    if ($copy -eq $true) {
+        Set-Clipboard -Value $outputfile
+    }
+}
+Write-Host 'Command: demicrosoft <input file> [-latest | -l] [-discord (use to disable)] [-hevc | -s] [-copy]'
