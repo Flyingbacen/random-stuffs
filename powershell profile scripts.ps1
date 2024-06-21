@@ -70,8 +70,8 @@ function demicrosoft {
         [Alias("s")]
         [switch]$hevc = $false,
         [switch]$ls = $false,
-        [switch]$gpu = $false,
-        [switch]$copy = $false
+        [Alias("usegpu")]
+        [switch]$gpu = $false
     )
     if ($ls -eq $true) {
         $latest = $true
@@ -85,9 +85,18 @@ function demicrosoft {
     }
     $inputfile = Convert-Path -Path $inputfile
     $outputfile = $inputfile -replace ".mp4", "-reformed.mp4"
-    if ($discord -eq $true -and (get-item (ffmpeg -i "$inputfile" (if ($hevc -eq $true) return -c:v (if ($gpu -ne $false) return ((($GPU=Get-CimInstance -ClassName CIM_VideoController).AdapterCompatibility) && if ($GPU -eq "NVIDIA") {return hevc_nvenc} elseif ($GPU -eq "Intel") {return hevc_qsv} elseif ($GPU -eq "AMD") {return hevc_amf} else {return hevc})) else {return hevc}) "$outputfile").Length -gt 26214400 (rem "26214400 = 25MB")) -and (Read-Host "File is larger than 25MB. Trim 5 seconds? (y/n)") -eq "y") {ffmpeg -i "$outputfile" -ss 5 -c copy ($outputfile -replace ".mp4", "-cut.mp4") && Remove-Item $outputfile}
-    if ($copy -eq $true) {
-        Set-Clipboard -Value $outputfile
+    if ($hevc -eq $false) {
+        ffmpeg -i "$inputfile" "$outputfile"
+    } elseif ($gpu -eq $true) {
+        ffmpeg -i "$inputfile" -c:v {switch((Get-CimInstance -ClassName CIM_VideoController).AdapterCompatibility){"NVIDIA"{"hevc_nvenc"}"Intel"{"hevc_qsv"}"AMD"{"hevc_amf"}default{"HEVC"}}} "$outputfile"
+    } else {
+        ffmpeg -i "$inputfile" -c:v hevc "$outputfile"
+    }
+
+    if ($Discord -eq $false -and (Get-Item $outputfile).Length -gt 26214400 -and (Read-Host "File is larger than 25MB. Trim 5 seconds? (y/n)") -eq "y") {
+        # 26214400 = 25MB
+        ffmpeg -i "$outputfile" -ss 5 -c copy ($outputfile -replace ".mp4", "-cut.mp4")
+        Remove-Item $outputfile
     }
 }
-Write-Host 'Command: demicrosoft <input file> [-latest | -l] [-discord (use to disable)] [-hevc | -s] [-copy]'
+Write-Host 'Command: demicrosoft <input file> [-latest | -l] [-discord (use to disable)] [-hevc | -s] [-usegpu]'
