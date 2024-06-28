@@ -25,3 +25,6 @@
 - [counter](./counter.py) -> Lets you count, and has saving via json
 
 - [pet simulator chance list](./ps99%20luck%20calculator.py) -> Search up a pet from the egg, pick what egg you're looking for, and you can see the base odds for all the pets in the egg
+    - If there is only one egg, it is automatically chosen
+
+- [coin flip](./coinflip.py) -> flips a coin until it happens x times, over y iterations, and then shows it to you with mathplotlib.
