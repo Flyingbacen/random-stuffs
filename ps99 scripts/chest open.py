@@ -23,5 +23,5 @@ def main():
         return
 
 if __name__ == "__main__":
-    time.sleep(5)
+    time.sleep(5) # 5 seconds to switch to the game
     main()
