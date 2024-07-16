@@ -27,4 +27,6 @@
 - [pet simulator chance list](./ps99%20luck%20calculator.py) -> Search up a pet from the egg, pick what egg you're looking for, and you can see the base odds for all the pets in the egg
     - If there is only one egg, it is automatically chosen
 
-- [coin flip](./coinflip.py) -> flips a coin until it happens x times, over y iterations, and then shows it to you with mathplotlib.
+- [coin flip](./coinflip.py) -> flips a coin until it happens x times, over y iterations, and then shows it to you with mathplotlib. made for a 1 in 16 mil visualization on reddit. Takes a few hours to finish with current settings
+
+- [chest open](./chest%20open.py) -> made for opening chests in ps99
