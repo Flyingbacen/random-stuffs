@@ -1,5 +1,5 @@
 ### Description of files
-- [fish.py](./fish.py) -> Made for auto-fishing in the Roblox game Pet Simulator 99
+- [fish.py](./ps99%20scripts/fish.py) -> Made for auto-fishing in the Roblox game Pet Simulator 99
 
 - [turtle pics](./find%20turtle%20pics.py) -> gui made to find the turtle pics in the spotify experiment, "he-brings-you-playback-progress". Uses [Rinuwaii's](https://github.com/rinuwaii) json file found [here](https://github.com/rinuwaii/he-brings-you-playback-progress/blob/main/heBringsYouPlaybackProgress.json), renamed to `list.json` in the file for simplicity.
 
@@ -24,9 +24,13 @@
 
 - [counter](./counter.py) -> Lets you count, and has saving via json
 
-- [pet simulator chance list](./ps99%20luck%20calculator.py) -> Search up a pet from the egg, pick what egg you're looking for, and you can see the base odds for all the pets in the egg
+- [pet simulator chance list](./ps99%20scripts/ps99%20luck%20calculator.py) -> Search up a pet from the egg, pick what egg you're looking for, and you can see the base odds for all the pets in the egg
     - If there is only one egg, it is automatically chosen
 
 - [coin flip](./coinflip.py) -> flips a coin until it happens x times, over y iterations, and then shows it to you with mathplotlib. made for a 1 in 16 mil visualization on reddit. Takes a few hours to finish with current settings
 
-- [chest open](./chest%20open.py) -> made for opening chests in ps99
+- [chest open](./ps99%20scripts/chest%20open.py) -> made for opening chests in ps99
+
+- [ps99 auto fuse](./ps99%20scripts/auto%20fuse.py) -> made for automatically fusing pets
+    - To start it, go to the world 1 fuse machine located in area 28 and open the menu. open the script and it will start automatically. If the script breaks, go to line 9 and change `num:int=2` to `num:int=3`.
+    - To stop the script, shove your mouse into any corner for about half a second.
