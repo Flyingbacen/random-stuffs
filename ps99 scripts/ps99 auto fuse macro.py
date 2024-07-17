@@ -27,7 +27,7 @@ def setup():
     fuse_button = 736, 710
     confirm_button = 1058, 716
     white_space_of_fuse_screen = 850, 280
-    close_after_fuse = 10 # close the game after fusing x times, 0 to disable
+    close_after_fuse = 0 # close the game after fusing x times, 0 to disable
     green = (129, 247, 14) # color of the green button, NOT coordinates. Most likely no need to change this
     achievement = True # enable if you just want the steampunk hoverboard (will take about 288 minutes with this script)
     timestats = False # enable if you want to see the time taken for each fuse, along with the average time
