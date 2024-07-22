@@ -9,7 +9,7 @@
     - demicrosoft
         - Made for game bar recordings, since they are somehow __*extremely*__ ineficient with storage space. (btw, Discord supports hevc now)
 
-- [8 ball pool free cure redeem](./8ballpoolredeem.py) -> Check out my other repository featuring a discord bot! -- [Github Repository](https://github.com/Flyingbacen/Discord-rawrbot)
+- [8 ball pool free cue redeem](./8ballpoolredeem.py) -> Check out my other repository featuring a discord bot! -- [Github Repository](https://github.com/Flyingbacen/Discord-rawrbot)
     - This is just stolen from there, since I'm apparently too lazy to re set it up so that the bot boots with my computer
 
 - [owo auto](./owo%20auto.py) -> made for the owo bot in discord. makes messy blob messages sometimes, shouldn't happen anymore though
@@ -32,5 +32,11 @@
 - [chest open](./ps99%20scripts/chest%20open.py) -> made for opening chests in ps99
 
 - [ps99 auto fuse](./ps99%20scripts/auto%20fuse.py) -> made for automatically fusing pets
-    - To start it, go to the world 1 fuse machine located in area 28 and open the menu. open the script and it will start automatically. If the script breaks, go to line 9 and change `num:int=2` to `num:int=3`.
+    - To start it, go to the world 1 fuse machine located in area 28 and open the menu. open the script and it will start automatically. If the script breaks, go to line 38 and change `num:int=1` to `num:int=2` or 3.
     - To stop the script, shove your mouse into any corner for about half a second.
+
+- [ps99 auto ultimate](./ps99%20scripts/auto%20ultimate.py) -> Will automatically use whatever ultimate you have equipped when it's ready.
+    - Will only run if Roblox is focused
+    - change the end of line 8 to 1 == 1 to skip checking if the ultimate is ready and press r every ten seconds regardless
+        - useful if you don't have a 1080p screen
+    - easy as running the script and letting it run in the background
