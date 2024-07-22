@@ -3,6 +3,7 @@ import pydirectinput # Works more reliable in roblox than pyautogui
 import sys # to exit the program
 import time
 import random
+import keyboard
 
 def setup():
     """
