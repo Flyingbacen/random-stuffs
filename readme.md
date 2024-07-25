@@ -32,8 +32,8 @@
 - [chest open](./ps99%20scripts/chest%20open.py) -> made for opening chests in ps99
 
 - [ps99 auto fuse](./ps99%20scripts/auto%20fuse.py) -> made for automatically fusing pets
-    - To start it, go to the world 1 fuse machine located in area 28 and open the menu. open the script and it will start automatically. If the script breaks, go to line 38 and change `num:int=1` to `num:int=2` or 3.
-    - To stop the script, shove your mouse into any corner for about half a second.
+    - To start it, go to the world 1 fuse machine located in area 28 and open the menu. open the script and it will start automatically. If the script breaks, go to line 35 and change `num:int=2` to `num:int=3`.
+    - To stop the script, shove your mouse into any corner for about half a second at most.
 
 - [ps99 auto ultimate](./ps99%20scripts/auto%20ultimate.py) -> Will automatically use whatever ultimate you have equipped when it's ready.
     - Will only run if Roblox is focused
