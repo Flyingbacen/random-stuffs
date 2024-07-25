@@ -1,3 +1,5 @@
+#### Requirements
+To run most of the files, you will need modules not included in python core. To fix this, after you have downloaded the zip in **code -> Download ZIP**, navigate to the folder in cmd/powershell and run `pip3 install -r requirements.txt`
 ### Description of files
 - [fish.py](./ps99%20scripts/fish.py) -> Made for auto-fishing in the Roblox game Pet Simulator 99
 
