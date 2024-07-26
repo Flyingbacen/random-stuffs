@@ -42,3 +42,6 @@ To run most of the files, you will need modules not included in python core. To 
     - change the end of line 8 to 1 == 1 to skip checking if the ultimate is ready and press r every ten seconds regardless
         - useful if you don't have a 1080p screen
     - easy as running the script and letting it run in the background
+
+- [ps99 auto spinny wheel](./ps99%20scripts/auto%20spinny%20wheel.py) -> Automatically spins spinny wheel if there's a huge. If not, goes to next world
+    - I plan to add another option where you can only use one world instead of having to use all three.
