@@ -50,7 +50,7 @@ try:
             print(f"Selected Egg: '{selected_egg['configName']}'")
             system("cls")
             for pet in selected_egg['configData']['pets']:
-                chance_standard_notation = "{:.6f}".format(float(pet[1]))
+                chance_standard_notation = "{:.10f}".format(float(pet[1]))
                 chance_standard_notation = chance_standard_notation.rstrip('0').rstrip('.')
                 print(f"Pet: '{pet[0]}' with a chance of {chance_standard_notation}%")
             if input("\n\nPress enter to exit.\ntype 1 to search again:") == "1":
