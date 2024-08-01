@@ -5,36 +5,49 @@ import random
 import numpy as np # Used to convert screenshot for OCR
 import keyboard # hotkey
 
+# region Settings
+# region Misc. Initilization settings
 HUGES_FOUND = [0, 0, 0]
+input.PAUSE = 0.05
+# endregion
 
-# Teleport settings
-TPWAITTIME = 5
+# region Teleport settings
 TELEPORTBUTTON = (168, 373)
 TELEPORTBUTTONCOLOR = (133, 171, 190)
+TELEPORTSCREEN = (650, 301)
+TELEPORTSCREENCOLOR = (255, 255, 255)
+CURRENTAREACOLOR = (116, 240, 251)
 AREA1 = (548, 345)
 AREA3 = (964, 345)
 WORLD1 = (410, 449)
 WORLD2 = (WORLD1[0], WORLD1[1] + 65)
 WORLD3 = (WORLD1[0], WORLD1[1] + 130)
-WORLDTPWAITTIME = 10
+WORLDTPWAITTIME = 10 # Not too important, just make sure it's not too short
 WORLDTPCONFIRM = (794, 718)
+# endregion
 
-# Wheel settings
+# region Wheel settings
 IMAGESPATH = "./../../Pictures/" # not used if OCR is enabled
 SPINNYWHEELSPIN = (650, 707)
 SPINNYWHEELX = (1469, 260)
-SPINNYWHEELOK = (958, 720)
-EXTRA_WHEEL_OPTIONS = [ # Used with OCR, add your own options here to also spin if these are in the 0.1% chance
+SPINNYWHEELOKCOLOR = (127, 246, 14)
+SPINNYWHEELOK = (864, 717)
+SPINNYWHEELBLUECOLOR = (81, 223, 254)
+SPINNYWHEELBLUE = (773, 441)
+SPINNYWHEELWHITECOLOR = (255, 255, 255)
+SPINNYWHEELWHITE = (868, 385)
+EXTRA_WHEEL_OPTIONS = [ 
                       "example item",
-                      "Chest Spell" 
+                      "Chest Spell"
                       ] 
 huge_names = {
              "world1": "Huge Propeller Cat", 
              "world2": "Huge Abyssal Axolotl", 
              "world3": "Huge Atomic Axolotl"
              }
+# endregion
 
-# OCR settings
+# region OCR settings
 # NOTE: All images are not given, and only regular huges are detected. This is theoretically more reliable than image detection
 n=time.time()
 USEOCR = True
@@ -45,6 +58,8 @@ if USEOCR:
     import easyocr
     reader = easyocr.Reader(['en'])
     print("Time to load OCR: " + str(round(time.time()-n, 2)) + "\n")
+# endregion
+# endregion
 
 
 def jitterclick(x:int, y:int, num:int=2, click:bool=True): # stolen from my auto fuse macro
@@ -61,14 +76,17 @@ def main(start_index:int, single_world:bool=False):
     def spin():
         jitterclick(*SPINNYWHEELSPIN)
         jitterclick(*SPINNYWHEELX)
-        time.sleep(0.5)
+        while True:
+            if MatchesColor(*SPINNYWHEELOK, SPINNYWHEELOKCOLOR, 3):
+                break
         jitterclick(*SPINNYWHEELOK)
-        time.sleep(1)
     
     def wheelsearch(huge:int):
         name = huge_names.get(f"world{huge}", "error: unknown value")
 
         while True:
+            while not MatchesColor(*SPINNYWHEELBLUE, SPINNYWHEELBLUECOLOR, 3) and MatchesColor(*SPINNYWHEELWHITE, SPINNYWHEELWHITECOLOR, 3):
+                pass
             if not USEOCR:
                 try:
                     if FindImage(IMAGESPATH + f"huge{huge}.png", confidence=0.9):
@@ -85,66 +103,65 @@ def main(start_index:int, single_world:bool=False):
                         print(e)
                         break
             if USEOCR:
-                jitterclick(1123, 333, 1, False)
+                jitterclick(1123, 333, 2, False)
                 for i in EXTRA_WHEEL_OPTIONS:
                     EXTRA_WHEEL_OPTIONS[EXTRA_WHEEL_OPTIONS.index(i)] = i.lower()
+                time.sleep(0.1)
                 file = np.array(screenshot(region = OCRREGION))
                 result = reader.readtext(file) 
-                example_result = [([[20, 4], [160, 4], [160, 32], [20, 32]], 'Mini Chest', 0.7377096682614568)]
+                example_result = [([tuple, tuple, tuple, tuple], 'Mini Chest', float)]
                 if result:
                     if result[0][1].lower() == name.lower():
                         print(name + " found")
                         HUGES_FOUND[huge-1] += 1
                         spin()
-                    elif any([option in result[0][1] for option in EXTRA_WHEEL_OPTIONS]):
+                    elif any([option in result[0][1].lower() for option in EXTRA_WHEEL_OPTIONS]):
                         print("\nExtra option found! spinning")
                         spin()
                     else:
                         print(f"found {result[0][1]}.\n{name} not found; leaving\n---")
                         break
                 else:
-                    print("failed to read the image")
+                    print("failed to read the text")
                     break
+            
+    def move(key:str, length:float):
+        input.keyDown(key)
+        time.sleep(length)
+        input.keyUp(key)
+
+
     def world1():
         while True:
             if MatchesColor(*TELEPORTBUTTON, TELEPORTBUTTONCOLOR, 3):
                 # TP area 3
                 jitterclick(*TELEPORTBUTTON)
-                time.sleep(0.5)
+                while not MatchesColor(*TELEPORTSCREEN, TELEPORTSCREENCOLOR, 3):
+                    pass
                 jitterclick(*AREA3) 
-                time.sleep(TPWAITTIME)
+                while MatchesColor(*TELEPORTSCREEN, TELEPORTSCREENCOLOR, 3): # Wait for the screen to close (lag)
+                    pass
+                jitterclick(*TELEPORTBUTTON)
+                while not MatchesColor(*AREA3, CURRENTAREACOLOR, 3): #Watch to see what area you're in
+                    pass
+                jitterclick(*TELEPORTBUTTON)
+                time.sleep(0.5)
                 break
-            else:
-                time.sleep(1)
-
-        input.press('q')
-        # Entering area 3
-        input.keyDown('w') 
-        time.sleep(0.5)
-        input.keyUp('w')
-
-        # Entering Castle
-        input.keyDown('a') 
-        time.sleep(1.9)
-        input.keyUp('a')
 
         # Go to the wheel 
-        input.keyDown('s')
-        time.sleep(1)
-        input.keyUp('s')
-                
+        input.press('q')
+        move('w', 0.5)
+        move('a', 2.02)
+        move('s', 1)
         # Spin the wheel if huge
         wheelsearch(1)
-        
         # leave the wheel menu
-        input.keyDown('w')
-        time.sleep(0.5)
-        input.keyUp('w')
+        move('w', 0.5)
         jitterclick(*SPINNYWHEELX)
-
         # Teleport to World 2
         jitterclick(*TELEPORTBUTTON)
-        time.sleep(0.5)
+        while not MatchesColor(*TELEPORTSCREEN, TELEPORTSCREENCOLOR, 3):
+            pass
         jitterclick(*WORLD2)
         time.sleep(0.5)
         jitterclick(*WORLDTPCONFIRM)
@@ -154,42 +171,39 @@ def main(start_index:int, single_world:bool=False):
             # TP to area 102 and back for regular positioning
             if MatchesColor(*TELEPORTBUTTON, TELEPORTBUTTONCOLOR, 3):
                 jitterclick(*TELEPORTBUTTON)
-                time.sleep(0.5)
+                while not MatchesColor(*TELEPORTSCREEN, TELEPORTSCREENCOLOR, 3): # Wait for the screen to open
+                    pass
                 jitterclick(*AREA3)
-                time.sleep(TPWAITTIME)
+                time.sleep(0.5)
+                jitterclick(*TELEPORTBUTTON)
+                while not MatchesColor(*AREA3, CURRENTAREACOLOR, 3):
+                    pass
+                time.sleep(0.5)
+                while not MatchesColor(*TELEPORTSCREEN, TELEPORTSCREENCOLOR, 3):
+                    pass
+                jitterclick(*AREA1)
+                time.sleep(0.5)
+                jitterclick(*TELEPORTBUTTON)
+                while not MatchesColor(*AREA1, CURRENTAREACOLOR, 3):
+                    pass
                 jitterclick(*TELEPORTBUTTON)
                 time.sleep(0.5)
-                jitterclick(*AREA1)
-                time.sleep(TPWAITTIME)
                 break
-            else:
-                time.sleep(1)
         # Go to spinny wheel
         input.press('q')
-        input.keyDown('w')
-        time.sleep(0.8)
-        input.keyUp('w')
-        input.keyDown('a')
-        time.sleep(2.35)
-        input.keyUp('a')
+        move('w', 0.8)
+        move('a', 2.5)
         input.keyDown('w')
         time.sleep(0.2)
-        input.press('space')
+        input.press('space') # Jump onto the platform
         time.sleep(0.6)
         input.keyUp('w')
-
-        # Spin the wheel if huge
         wheelsearch(2)
-        
-        # leave the wheel menu
-        input.keyDown('s')
-        time.sleep(0.5)
-        input.keyUp('s')
+        move('s', 0.5)
         jitterclick(*SPINNYWHEELX)
-
-        # TP to world 3
         jitterclick(*TELEPORTBUTTON)
-        time.sleep(0.5)
+        while not MatchesColor(*TELEPORTSCREEN, TELEPORTSCREENCOLOR, 3):
+            pass
         jitterclick(*WORLD3)
         time.sleep(0.5)
         jitterclick(*WORLDTPCONFIRM)
@@ -199,45 +213,38 @@ def main(start_index:int, single_world:bool=False):
             # TP to area 200 and back for regular positioning
             if MatchesColor(*TELEPORTBUTTON, TELEPORTBUTTONCOLOR, 3):
                 jitterclick(*TELEPORTBUTTON)
-                time.sleep(0.5)
+                while not MatchesColor(*TELEPORTSCREEN, TELEPORTSCREENCOLOR, 3):
+                    pass
                 jitterclick(*AREA1)
-                time.sleep(TPWAITTIME)
+                while MatchesColor(*TELEPORTBUTTON, TELEPORTBUTTONCOLOR, 3):
+                    pass
+                while not MatchesColor(*TELEPORTBUTTON, TELEPORTBUTTONCOLOR, 3):
+                    pass
                 jitterclick(*TELEPORTBUTTON)
-                time.sleep(0.5)
-                jitterclick(*WORLD3)
-                time.sleep(TPWAITTIME)
+                while not MatchesColor(*TELEPORTSCREEN, TELEPORTSCREENCOLOR, 3):
+                    pass
+                jitterclick(*WORLD3) # Back to spawn
+                while MatchesColor(*TELEPORTBUTTON, TELEPORTBUTTONCOLOR, 3):
+                    pass
+                while not MatchesColor(*TELEPORTBUTTON, TELEPORTBUTTONCOLOR, 3):
+                    pass
                 break
-            else:
-                time.sleep(1)
 
-        # Go to spinny wheel
         input.press('q')
-        input.keyDown('d')
-        time.sleep(0.4)
-        input.keyUp('d')
-        input.keyDown('s')
-        time.sleep(1.5)
-        input.keyUp('s')
-
-        # Spin the wheel if huge
+        move('d', 0.5)
+        move('s', 1.5)
         wheelsearch(3)
-
-        # leave the wheel menu
-        input.keyDown('w')
-        time.sleep(0.5)
-        input.keyUp('w')
+        move('w', 0.5)
         jitterclick(*SPINNYWHEELX)
-
-        # TP to world 1
         jitterclick(*TELEPORTBUTTON)
-        time.sleep(0.5)
+        while not MatchesColor(*TELEPORTSCREEN, TELEPORTSCREENCOLOR, 3):
+            pass
         jitterclick(*WORLD1)
         time.sleep(0.5)
         jitterclick(*WORLDTPCONFIRM)
         time.sleep(WORLDTPWAITTIME)
 
     worlds = [world1, world2, world3]
-
     if not single_world:
         while True:
             for i in range(start_index, start_index + len(worlds)): 
@@ -251,56 +258,53 @@ def main(start_index:int, single_world:bool=False):
         elif start_index == 2:
             backtoworld = WORLD3
         while True:
-            if this == 1:
+            if this == 1: # Do it once and never again
                 worlds[start_index]()
                 this += 1
             if MatchesColor(*TELEPORTBUTTON, TELEPORTBUTTONCOLOR, 3):
                 jitterclick(*TELEPORTBUTTON)
-                time.sleep(0.5)
+                while not MatchesColor(*TELEPORTSCREEN, TELEPORTSCREENCOLOR, 3):
+                    pass
                 jitterclick(*backtoworld)
                 time.sleep(0.5)
                 jitterclick(*WORLDTPCONFIRM)
                 time.sleep(WORLDTPWAITTIME)
                 worlds[start_index]()
-            else:
-                time.sleep(1)
 
-
-
-if __name__ == '__main__':
-    def clean():
-        while True:
-            try:
-                input.keyUp('w')
-                input.keyUp('a')
-                input.keyUp('s')
-                input.keyUp('d')
-                if HUGES_FOUND != [0, 0, 0]:
-                    print(
-                         f"""Huge Propeller Cat: {HUGES_FOUND[0]}
-                         Huge Abyssal Axolotl: {HUGES_FOUND[1]}
-                         Huge Atomic Axolotl: {HUGES_FOUND[2]}"""
-                         )
-                exit()
-            except input.FailSafeException:
-                pass
-    def shortcut(index, single_world=False):
-        try:    
-            keyboard.remove_all_hotkeys()
-            main(index, single_world)
-        except KeyboardInterrupt:
-            print("exiting")
+def clean():
+    # region cleanup
+    while True:
+        try:
+            input.keyUp('w')
+            input.keyUp('a')
+            input.keyUp('s')
+            input.keyUp('d')
+            if HUGES_FOUND != [0, 0, 0]:
+                print(f"""Huge Propeller Cat: {HUGES_FOUND[0]}
+                    Huge Abyssal Axolotl: {HUGES_FOUND[1]}
+                    Huge Atomic Axolotl: {HUGES_FOUND[2]}""")
+            else: print("No huges found\n")
+            print("Manually close the program")
+            exit()
         except input.FailSafeException:
-            print("move your mouse")
-        except Exception as e:
-            print(e)
-        finally:
-            clean()
-    print("Press F1, F2, or F3, based on what world you're in to start from that world.\nuse 1, 2, or 3 to use only that world. (this is overall slower, but useful if you don't have any of the other world's tickets)\n---")
-    keyboard.add_hotkey("f1", lambda: shortcut(0))
-    keyboard.add_hotkey("f2", lambda: shortcut(1))
-    keyboard.add_hotkey("f3", lambda: shortcut(2))
-    keyboard.add_hotkey("1", lambda: shortcut(0, True))
-    keyboard.add_hotkey("2", lambda: shortcut(1, True))
-    keyboard.add_hotkey("3", lambda: shortcut(2, True))
-    keyboard.wait()
+            pass
+def shortcut(index, single_world=False):
+    try:    
+        keyboard.remove_all_hotkeys()
+        main(index, single_world)
+    except KeyboardInterrupt: print("exiting")
+    except input.FailSafeException: print("move your mouse")
+    except Exception as e: print(e)
+    finally: clean()
+# region hotkeys
+print(
+    """Press F1, F2, or F3, based on what world you're in to start from that world.
+    use 1, 2, or 3 to use only that world. (this is overall slower, but useful if you don't have any of the other world's tickets)
+    ---""")
+keyboard.add_hotkey("f1", lambda: shortcut(0))
+keyboard.add_hotkey("f2", lambda: shortcut(1))
+keyboard.add_hotkey("f3", lambda: shortcut(2))
+keyboard.add_hotkey("1", lambda: shortcut(0, True))
+keyboard.add_hotkey("2", lambda: shortcut(1, True))
+keyboard.add_hotkey("3", lambda: shortcut(2, True))
+keyboard.wait()
