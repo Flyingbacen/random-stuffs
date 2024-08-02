@@ -111,7 +111,7 @@ def main(start_index:int, single_world:bool=False):
                 result = reader.readtext(file) 
                 example_result = [([tuple, tuple, tuple, tuple], 'Mini Chest', float)]
                 if result:
-                    if result[0][1].lower() == name.lower():
+                    if result[0][1].lower() == name.lower() or "Huge" in result[0][1]:
                         print(name + " found")
                         HUGES_FOUND[huge-1] += 1
                         spin()
@@ -150,8 +150,8 @@ def main(start_index:int, single_world:bool=False):
 
         # Go to the wheel 
         input.press('q')
-        move('w', 0.5)
-        move('a', 2.02)
+        move('w', 0.75)
+        move('a', 2.1)
         move('s', 1)
         # Spin the wheel if huge
         wheelsearch(1)
