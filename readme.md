@@ -1,5 +1,5 @@
 #### Requirements
-To run most of the files, you will need modules not included in python core. To fix this, after you have downloaded the zip in **code -> Download ZIP**, navigate to the folder in cmd/powershell and run `pip3 install -r requirements.txt`
+To run most of the files, you will need modules not included in python core. To fix this, after you have downloaded the zip in **code -> Download ZIP**, navigate to the folder in cmd/powershell and run <kbd>pip3 install -r requirements.txt</kbd>
 ### Description of files
 - [fish.py](./ps99%20scripts/fish.py) -> Made for auto-fishing in the Roblox game Pet Simulator 99
 
@@ -15,7 +15,6 @@ To run most of the files, you will need modules not included in python core. To 
     - This is just stolen from there, since I'm apparently too lazy to re set it up so that the bot boots with my computer
 
 - [owo auto](./owo%20auto.py) -> made for the owo bot in discord. makes messy blob messages sometimes, shouldn't happen anymore though
-    - broken version is broken. make a pull request if you think you can fix it :)
 
 - [random list](./radom%20list%201-10.py) -> was bored and wanted to see if I could do it
     - easily customizable to however long you want the numbers to go on for
