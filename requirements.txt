@@ -1,5 +1,6 @@
 aiohttp==3.9.1
-matplotlib==3.9.1
+matplotlib==3.9.0
+keyboard==0.13.5
 numpy==2.0.1
 Pillow==10.4.0
 PyAutoGUI==0.9.54
@@ -9,4 +10,5 @@ PySimpleGUI==5.0.6
 pywin32==306
 Requests==2.32.3
 easyocr==1.7.1
+translate==3.6.1
 # Generated with pipreqs

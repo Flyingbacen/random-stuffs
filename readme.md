@@ -45,3 +45,37 @@ To run most of the files, you will need modules not included in python core. To 
 
 - [ps99 auto spinny wheel](./ps99%20scripts/auto%20spinny%20wheel.py) -> Automatically spins spinny wheel if there's a huge. If not, goes to next world
     - I plan to add another option where you can only use one world instead of having to use all three.
+    <details><summary>Default Keybinds</summary>
+        <ul>
+            <li><kbd>f1</kbd>: Start from World 1 and continue
+            <li><kbd>f2</kbd>: Start from World 2 and continue
+            <li><kbd>f3</kbd>: Start from World 3 and continue
+            <li><kbd>1</kbd>: Use only World 1
+            <li><kbd>2</kbd>: Use only World 2
+            <li><kbd>3</kbd>: Use only World 3
+        </ul>
+    </details>
+
+- [screenshot/autotranslate](./screenshot.py) -> Takes a screenshot of a predefined area and automatically translates
+    - To change the region where the screenshot is saved by default, change `DEFAULTREGION` to the format x<sub>1</sub>, y<sub>1</sub>, x<sub>2</sub>, y<sub>2</sub>.
+        - x<sub>1</sub>, y<sub>1</sub> is the top left corner of the region to screenshot
+        - x<sub>2</sub>, y<sub>2</sub> is the bottom right corner
+    - You can choose to disable translation by changing `TRANSLATE = True` to `TRANSLATE = False`
+        - The default language translation is from chinese simplified _(zh_Hans)_ to English _(en)_. 
+    - You can choose to have the screenshot taken saved to the clipboard by setting `IMAGE_TO_CLIPBOARD = False` to `IMAGE_TO_CLIPBOARD = True`
+    <details><summary>Default keybinds:</summary>
+        <ul>
+            <li><kbd>s</kbd>: take a screenshot and/or translate</li>
+            <li><kbd>d</kbd>: clear terminal output</li>
+            <li><kbd><kbd>shift</kbd>+<kbd>[</kbd></kbd>: Change the region</li>
+            <ul>
+                <li>after activating this keybind, press enter on the top right region, and then enter on the bottom right region. The enter key shouldn't activate anything on the program itself.</li>
+            </ul>
+            <li><kbd><kbd>shift</kbd>+<kbd>r</kbd></kbd>: Change the region back to <code>DEFAULTREGION</code></li>
+        </ul>
+    </details>
+
+    <details>
+        <summary>Individual Python Dependencies</summary>
+        <kbd>pip3 install pyautogui pywin32 numpy translate keyboard Pillow</kbd>
+    </details>
