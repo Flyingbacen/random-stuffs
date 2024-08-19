@@ -1,9 +1,15 @@
-from pyautogui import pixelMatchesColor as MatchesColor, locateOnScreen as FindImage, screenshot, ImageNotFoundException
-import pydirectinput as input
-import time
-import random
-import numpy as np # Used to convert screenshot for OCR
-import keyboard # hotkey
+try:
+    from pyautogui import pixelMatchesColor as MatchesColor, locateOnScreen as FindImage, screenshot, ImageNotFoundException
+    import pydirectinput as input
+    import time
+    import random
+    import numpy as np # Used to convert screenshot for OCR
+    import keyboard # hotkey
+except ImportError: # Install required modules if not found
+    print("Installing required modules...")
+    import os
+    os.system("pip install pyautogui pydirectinput easyocr keyboard numpy")
+    print("Please restart the script.")
 
 # region Settings
 # region Misc. Initilization settings
