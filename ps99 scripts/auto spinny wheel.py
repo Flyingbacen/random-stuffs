@@ -8,7 +8,7 @@ try:
 except ImportError: # Install required modules if not found
     print("Installing required modules...")
     import os
-    os.system("pip install pyautogui pydirectinput easyocr keyboard numpy")
+    os.system("pip install pyautogui pydirectinput easyocr keyboard numpy torch torchvision torchaudio")
     print("Please restart the script.")
 
 # region Settings
