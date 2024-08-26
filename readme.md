@@ -51,3 +51,18 @@ Scripts for ps99 have been moved <a href="https://github.com/Flyingbacen/PS99-sc
     <details><summary>Individual Python Dependencies</summary>
         <kbd>pip3 install pyautogui pywin32 numpy translate keyboard Pillow</kbd>
     </details>
+
+- [twitch api thing?](./twitchapi.py) -> Made for the Pokemon drops, where you need to watch specific streamers for the specific game, leave it running in the background and it will send a webhook wherever you want it to in discord.
+    - requires manually setting up your twitch api/application
+    - follow [this](https://dev.twitch.tv/docs/api/get-started/) official guide for an easy setup.<br>You only need to follow up to "Get an OAuth Token"
+    - Uses authcodes.json, which should be in the same directory as the file.
+        <details><summary>example file setup</summary>
+        <pre><code>
+        {
+            "client_id": "client_id",
+            "secret": "client_secret",
+            "Authorization": "oauth_token"
+        }
+        </code></pre>
+        </details>
+    - the script should theoretically automatically update your OAuth token, but I'm not entirely sure if it works properly or not yet
