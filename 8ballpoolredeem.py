@@ -57,7 +57,7 @@ async def yes():
 
             # Redeem the free cue piece
             cue_StatusCode = await redeem_free_cue(user_id, free_cue_sku)
-            if cue_StatusCode == True:
+            if cue_StatusCode:
                 print(f"Successfully redeemed today's cue piece\n\t\t~~||sku:{free_cue_sku}||~~")
             else:
                 print(f"Error redeeming today's cue piece.\nStatus code:\n\t{cue_StatusCode}")
