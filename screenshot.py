@@ -8,9 +8,27 @@ import os
 import pyautogui
 from win32gui import GetWindowText as WindowTitle, GetForegroundWindow as ForegroundWindow
 
-TRANSLATE = True
-IMAGE_TO_CLIPBOARD = False
-DEFAULTREGION = 567, 671, 1351, 827
+if os.path.exists('config.json'):
+    import json
+    with open('.config.json') as f:
+        config = json.load(f)
+        TRANSLATE = config['translate']
+        IMAGE_TO_CLIPBOARD = config['image_to_clipboard']
+        DEFAULTREGION = tuple(config['region'])
+else:
+        
+    TRANSLATE = True
+    IMAGE_TO_CLIPBOARD = False
+    DEFAULTREGION = 276, 790, 1646, 1056
+    if input("Do you want to make a config file? (y/n): ").lower() == 'y':
+        with open('.config.json', 'w') as f:
+            config = {
+                'translate': TRANSLATE,
+                'image_to_clipboard': IMAGE_TO_CLIPBOARD,
+                'region': list(DEFAULTREGION)
+            }
+            json.dump(config, f)
+# DEFAULTREGION = 567, 671, 1351, 827
 REGION = DEFAULTREGION
 
 if not TRANSLATE and not IMAGE_TO_CLIPBOARD:
@@ -20,8 +38,8 @@ if not TRANSLATE and not IMAGE_TO_CLIPBOARD:
 if TRANSLATE:
     print('loading easyocr...')
     import easyocr
-    reader = easyocr.Reader(['ch_sim', 'en'])
-    translator = Translator(to_lang='en', from_lang='zh-Hans')
+    reader = easyocr.Reader(['ja', 'en'])
+    translator = Translator(to_lang='en', from_lang='ja')
     print('easyocr loaded')
 
 os.system('cls')
