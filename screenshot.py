@@ -10,7 +10,7 @@ from win32gui import GetWindowText as WindowTitle, GetForegroundWindow as Foregr
 
 if os.path.exists('config.json'):
     import json
-    with open('.config.json') as f:
+    with open('./config.json') as f:
         config = json.load(f)
         TRANSLATE = config['translate']
         IMAGE_TO_CLIPBOARD = config['image_to_clipboard']
