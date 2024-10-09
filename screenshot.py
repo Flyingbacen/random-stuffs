@@ -53,20 +53,6 @@ def take_screenshot():
     global REGION
     rresult = ''
     screenshot = ImageGrab.grab(bbox=REGION)
-    if TRANSLATE: np_screenshot = np.array(screenshot)
-    if TRANSLATE:
-        easyocr_result = reader.readtext(np_screenshot)
-        # print(easyocr_result) # Debug
-        print('---\nDetected text\n')
-        for result in easyocr_result:
-            print(result[1])
-            rresult += result[1]
-
-        print('---\nTranslated text\n')
-        print(translator.translate(rresult))
-        # for result in easyocr_result: # old version, slower and depending on the sentence structure made less sense
-        #     print(translator.translate(result[1]))
-
     if IMAGE_TO_CLIPBOARD:
         output = io.BytesIO()
         screenshot.save(output, format='BMP')
@@ -76,6 +62,21 @@ def take_screenshot():
         win32clipboard.EmptyClipboard()
         win32clipboard.SetClipboardData(win32clipboard.CF_DIB, bmp_data)
         win32clipboard.CloseClipboard()
+    if TRANSLATE: np_screenshot = np.array(screenshot)
+    if TRANSLATE:
+        easyocr_result = reader.readtext(np_screenshot)
+        # print(easyocr_result) # Debug
+        print('---\nDetected text\n')
+        for result in easyocr_result:
+            print(result[1])
+            rresult += result[1]
+        if rresult == '': return
+
+        print('---\nTranslated text\n')
+        print(translator.translate(rresult))
+        # for result in easyocr_result: # old version, slower and depending on the sentence structure made less sense, and hurts the api
+        #     print(translator.translate(result[1]))
+
 def change_region(default=False):
     global REGION
     if WINDOW_NAME != WindowTitle(ForegroundWindow()):
