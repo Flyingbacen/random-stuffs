@@ -1,28 +1,29 @@
-import asyncio
 import pyautogui
+import threading
+from keyboard import add_hotkey, remove_hotkey, wait
 
-async def hunt():
-    await asyncio.sleep(0.5)
-    while True:
-        pyautogui.typewrite("owo hunt")
+def hunt():
+    global running
+    pyautogui.sleep(0.5)
+    while running:
+        pyautogui.typewrite("owo hunt  ")
         pyautogui.press("enter")
-        await asyncio.sleep(15.2)
-async def battle():
-    while True:
+        pyautogui.sleep(15)
+def battle():
+    global running
+    while running:
         pyautogui.typewrite("owo battle")
         pyautogui.press("enter")
-        await asyncio.sleep(15.2)
+        pyautogui.sleep(15)
+def stop():
+    global running
+    running = False
+    hunt.join()
+    battle.join()
 
-async def main():
-    hunting = asyncio.create_task(hunt())
-    battleing = asyncio.create_task(battle())
-    await hunting
-    await battleing
+hunt = threading.Thread(target=hunt)
+battle = threading.Thread(target=battle)
 
 if __name__ == "__main__":
-    pyautogui.sleep(2)
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("Exiting")
-        exit()
+    add_hotkey("s", lambda: [hunt.start(), battle.start(), remove_hotkey("s"), add_hotkey("q", stop)])
+    wait()
