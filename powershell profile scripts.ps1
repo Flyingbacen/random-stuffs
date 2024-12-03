@@ -68,8 +68,9 @@ function demicrosoft {
         [switch]$latest = $false,
         [Alias("s")]
         [switch]$hevc = $false,
-        [Alias("usegpu")]
-        [switch]$gpu = $false,
+        [switch]$ls = $false,
+        [Alias("g")]
+        [switch]$usegpu = $false,
         [Alias("h")]
         [switch]$help = $false,
         [alias("compat")]
@@ -77,14 +78,25 @@ function demicrosoft {
     )
     if ($help -eq $true) {
         Write-Host @'
-Command: demicrosoft <input file> [-latest | -l] [-discord | -d] [-hevc | -s] [-usegpu]
+Command: demicrosoft <input file> [-latest | -l] [-hevc | -s] [-usegpu | g] [-help | -h] [-dsccompat]
 input file: The file to convert.
 -latest | -l: Use the latest file in the directory. Overrides input file.
--dsccompat: Compress the file for Discord's 25MB limit. hits around 24.9MB
 -hevc | -s: Use HEVC codec.
+-dsccompat: Compress the file to ensure it is under Discord's 10MB limit. implies -hevc.
 -usegpu: Use GPU for encoding. Implies -hevc (Less efficient compression, much faster encoding)
 '@
         return
+    }
+    for ($i = 0; $i -lt $args.Length; $i++) {
+        if ($args[$i] -eq "-l") {
+            $latest = $true
+        }
+        if ($args[$i] -eq "-s") {
+            $hevc = $true
+        }
+        if ($args[$i] -eq "-g") {
+            $usegpu = $true
+        }
     }
     if ($latest -eq $true) {
         $inputfile = Get-ChildItem | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 1
@@ -92,7 +104,9 @@ input file: The file to convert.
     if ($inputfile -eq "") {
         throw 'No input file specified.'
     }
+
     $inputfile = Convert-Path -Path $inputfile
+    Write-Warning "Input file: $inputfile"
     $outputfile = $inputfile -replace ".mp4", "-reformed.mp4"
 
     if ($dsccompatible -eq $true) {
@@ -100,29 +114,50 @@ input file: The file to convert.
         $duration = ($ffprobejson | ConvertFrom-Json).format.duration
         $outputfile = $outputfile -replace "-reformed.mp4", "-compressed.mp4"
 
-        $target_file_size_bits = 209715192 # 25MB
-        $audio_bitrate_bps = 1024000 # 128KB
-        $total_audio_bits = $audio_bitrate_bps * $duration
-        $available_video_bits = $target_file_size_bits - $total_audio_bits
-        $video_bitrate_bps = $available_video_bits / $duration
+        $target_file_size_bits = 10485760 # 10MB
+        $video_bitrate_bps = $target_file_size_bits / $duration
         $video_bitrate_kbps = [math]::Round($video_bitrate_bps / 1024)
 
-        Write-Warning "Duration: $duration`s  Video Bitrate: $video_bitrate_kbps kbps"
+        Write-Warning "Duration: $duration`s    Video Bitrate: $video_bitrate_kbps kbps"
+        
+        if ($usegpu -eq $true) {
+            $encoder_format = switch((Get-CimInstance -ClassName CIM_VideoController).AdapterCompatibility) {
+                "NVIDIA" {"hevc_nvenc"}
+                "Intel" {"hevc_qsv"}
+                "AMD" {"hevc_amf"}
+                default {"hevc"}
+            }
+            if ($encoder_format -eq "") {
+                Write-Warning "No GPU encoder found, using CPU."
+            }
+        }
 
-        ffmpeg -i "$inputfile" -y -c:v hevc -b:v $video_bitrate_kbps`k -b:a 128k -pass 1 -an -f null NUL
-        ffmpeg -i "$inputfile" -y -c:v hevc -b:v $video_bitrate_kbps`k -b:a 128k -pass 2 "$outputfile"
+        ffmpeg -i "$inputfile" -y -c:v $encoder_format -b:v $video_bitrate_kbps`k -b:a 128k -pass 1 -an -f null NUL
+        ffmpeg -i "$inputfile" -y -c:v $encoder_format -b:v $video_bitrate_kbps`k -b:a 128k -pass 2 "$outputfile"
+        rm "ffmpeg2pass-0.log"
+        if ($copy -eq $true) {
+            Set-Clipboard -Path $outputfile
+        }
         return
     }
 
     if ($hevc -eq $false ) {
         ffmpeg -i "$inputfile" "$outputfile"
-    } elseif ($gpu -eq $true) {
-        ffmpeg -i "$inputfile" -c:v {switch((Get-CimInstance -ClassName CIM_VideoController).AdapterCompatibility){"NVIDIA"{"hevc_nvenc"}"Intel"{"hevc_qsv"}"AMD"{"hevc_amf"}default{"HEVC"}}} "$outputfile"
+    } elseif ($usegpu -eq $true) {
+        $encoder_format = switch((Get-CimInstance -ClassName CIM_VideoController).AdapterCompatibility) {
+            "NVIDIA" {"hevc_nvenc"}
+            "Intel" {"hevc_qsv"}
+            "AMD" {"hevc_amf"}
+            default {"hevc"}
+        }
+        ffmpeg -i "$inputfile" -c:v $encoder_format "$outputfile"
     } else {
         ffmpeg -i "$inputfile" -c:v hevc "$outputfile"
     }
-    return
 
-    if ((Get-Item $outputfile).Length -gt 26214400) {Write-Warning "The file is too large for Discord, try running with the -dsccompat flag if you are compressing for Discord."}
+    if ((Get-Item $outputfile).Length -gt 26214400) {Write-Warning "The file is too large for Discord, try running with the -dsccompat flag"}
+    if ($copy -eq $true) {
+        Set-Clipboard -Path $outputfile
+    } 
 }
-Write-Host 'Command: demicrosoft <input file> [-latest | -l] [-discord | -d] [-hevc | -s] [-usegpu] [-help | -h]'
+Write-Host 'Command: demicrosoft <input file> [-latest | -l] [-discord | -d] [-hevc | -s] [-usegpu] [-help | -h] [-dsccompat]'
