@@ -1,0 +1,63 @@
+{
+  "Weapons": {
+    "Assault Rifles": {
+      "XM4": 2000,
+      "AK-74": 2000,
+      "AMES 85": 2000,
+      "GPR 91": 2000,
+      "MODEL L": 2000,
+      "GOBLIN MK2": 2000,
+      "AS VAL": 2012,
+      "KRIG C": 2000
+    },
+    "Submachine Guns": {
+      "C9": 2000,
+      "KSV": 2000,
+      "TANTO .22": 2000,
+      "PP-919": 2000,
+      "JACKAL PDW": 2000,
+      "KOMPAKT 92": 2000,
+      "SAUG": 2000
+    },
+    "Shotguns": {
+      "MARINE SP": 237,
+      "ASG-89": 1226,
+      "Maelstrom": 0
+    },
+    "Light Machine Guns": {
+      "PU-21": 3,
+      "XMG": 49,
+      "GPMG-7": 0
+    },
+    "Marksman Rifles": {
+      "SWAT 5.56": 2000,
+      "TSARKOV 7.62": 2000,
+      "AEK-973": 2000,
+      "DM-10": 2000
+    },
+    "Sniper Rifles": {
+      "LW3A1 FROSTLINE": 710,
+      "SVD": 1265,
+      "LR 7.62": 1617,
+      "AMR MOD 4": 2227
+    },
+    "Pistols": {
+      "9MM PM": 2138,
+      "GREKHOVA": 1,
+      "GS45": 2040,
+      "STRYDER .22": 156
+    },
+    "Launchers": {
+      "CIGMA 2B": 2000,
+      "HE-1": 2000
+    },
+    "Special": {
+      "SIRIN 9MM": 415
+    },
+    "Melee": {
+      "KNIFE": 2000,
+      "BASEBALL BAT": 2000,
+      "POWER DRILL": 2000
+    }
+  }
+}

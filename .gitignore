@@ -1,3 +1,4 @@
 .gitignore
 *test*
 *.json
+!bo6*info.json

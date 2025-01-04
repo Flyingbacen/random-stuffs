@@ -66,3 +66,16 @@ Scripts for ps99 have been moved <a href="https://github.com/Flyingbacen/PS99-sc
         </code></pre>
         </details>
     - the script should theoretically automatically update your OAuth token, but I'm not entirely sure if it works properly or not yet
+
+- [bo6 military tracker](./bo6%20military%20tracker.py) -> For tracking your journey to 2000 critical kills for bo6 zombie camos
+    - Will ask you what weapon to track when opening the file. select the category and then your weapon.
+        - To add a new gun, follow the format in the json file and follow it.
+    - Run in the background on a different monitor
+    - If the JSON file is not found, will prompt the user to download it.
+    - use [bo6 mil convert.py](./bo6%20mil%20convert.py) to reset all values in [bo6 military tracker.json](./bo6%20military%20tracker%20info.json) (they're using my values as of uploading because I could care less)
+        - Backup the file once it's done just in case
+    - hotkeys are:
+        - <kbd>+</kbd>: calculate kills **(must be used with the weapon stats screen open [can be opened with the <kbd>`</kbd> key.])**
+        - <kbd>-</kbd>: Change currently tracked gun. Will save the current gun's information.
+            - Use the <kbd>+</kbd> and <kbd>-</kbd> when ending a match to save stats.
+    - **Make sure to save your stats at the end of a match**
