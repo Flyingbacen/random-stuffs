@@ -1,6 +1,7 @@
 import pyautogui
 import threading
 from keyboard import add_hotkey, remove_hotkey, wait
+running = True
 
 def hunt():
     global running
