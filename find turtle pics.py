@@ -1,12 +1,18 @@
-import PySimpleGUI as sg
+# import PySimpleGUI as sg ### This library has turned into being nagware
+import FreeSimpleGUI as sg
 import json
 from PIL import Image, ImageTk
 import io
 import urllib.request
 import tkinter as tk
 
-with open(r'list.json') as f:
-    data = json.load(f)
+try:
+    with open(r'list.json') as f:
+        data = json.load(f)
+except FileNotFoundError:
+    data = json.loads(urllib.request.urlopen("https://raw.githubusercontent.com/rinuwaii/he-brings-you-playback-progress/main/heBringsYouPlaybackProgress.json").read())
+    with open(r'list.json', 'w') as f:
+        json.dump(data, f)
 
 def search_and_update_list(search_term):
     search_term = search_term.replace(" ", "-")
@@ -21,7 +27,11 @@ def on_listbox_selection(event):
     selected_item = selected_items[0]
     image_url = selected_item["url"]
 
-    image_data = urllib.request.urlopen(image_url).read()
+    try:
+        image_data = urllib.request.urlopen(image_url).read()
+    except urllib.error.HTTPError:
+        sg.popup_error("Failed to download the image.")
+        return
     image = Image.open(io.BytesIO(image_data))
 
     photo = ImageTk.PhotoImage(image)
