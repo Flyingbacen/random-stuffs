@@ -30,7 +30,7 @@ wantedgames = ["Pokémon Trading Card Game", "Pokémon GO", "Pokémon Trading Ca
 webhook = SyncWebhook.from_url(authcodes["webhook_url"])
 
 def refreshAuth():
-    headers = {'Content-Type: application/x-www-form-urlencoded'}
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     response = requests.post("https://id.twitch.tv/oauth2/token?client_id=" + authcodes["client_id"] + "&client_secret=" + authcodes["secret"] + "&grant_type=client_credentials", headers=headers)
     authcodes["Authorization"] = response.json()["access_token"]
     json.dump(authcodes, open(filedir + "authcodes.json", "w"))
