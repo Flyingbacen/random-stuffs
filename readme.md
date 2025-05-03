@@ -5,7 +5,7 @@ To run most of the files, you will need modules not included in python core. To 
 Scripts for ps99 have been moved <a href="https://github.com/Flyingbacen/PS99-scripts">here</a> due to how many I have made over time.
 </details>
 
-- [turtle pics](./find%20turtle%20pics.py) -> gui made to find the turtle pics in the spotify experiment, "he-brings-you-playback-progress". Uses [Rinuwaii's](https://github.com/rinuwaii) json file found [here](https://github.com/rinuwaii/he-brings-you-playback-progress/blob/main/heBringsYouPlaybackProgress.json), renamed to `list.json` in the file for simplicity.
+- [turtle pics](./find%20turtle%20pics.py) -> gui made to find the turtle pics in the spotify experiment, "he-brings-you-playback-progress". Uses [Rinuwaii's](https://github.com/rinuwaii) json file found [here](https://github.com/rinyafii/he-brings-you-playback-progress/raw/refs/heads/main/heBringsYouPlaybackProgress.json), renamed to `list.json` in the file for simplicity.
 
 - [ps profile script](./powershell%20profile%20scripts.ps1) -> second function (turtlesong) was not intended to be related to turtle pics, was used for downloading snippets of a stream, and output to ./turtlesongs/
     - first function was more of a test than anything else tbh
@@ -79,3 +79,8 @@ Scripts for ps99 have been moved <a href="https://github.com/Flyingbacen/PS99-sc
         - <kbd>-</kbd>: Change currently tracked gun. Will save the current gun's information.
             - Use the <kbd>+</kbd> and <kbd>-</kbd> when ending a match to save stats.
     - **Make sure to save your stats at the end of a match**
+
+- [Roblox Clicklock/DirectX Clicklock](./clicklock.py) -> Made for a mining game I was playing and wanted to be lazy. Because roblox is a dumbie though, Windows builtin clicklock wouldn't work.
+    - <kbd>f</kbd> to toggle clicklock. Pressing other keys when you press f will cause it to do nothing
+        - I could fix this if I wanted to probably
+    - If you click with your mouse, it will also stop. The program won't register it though and you will need to press <kbd>f</kbd> twice.
