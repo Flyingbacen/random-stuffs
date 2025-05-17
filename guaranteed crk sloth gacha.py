@@ -31,8 +31,7 @@ class OneTimeSources(Points):
 
     # region paid sources
     class PaidSources(Points):
-        class EternalPass(Points):
-            PaidEternalPass=1000+1000+1000+1000+2000 # Level: 1, 15, 25, 35, 40
+        PaidEternalPass=1000+1000+1000+1000+2000 # Level: 1, 15, 25, 35, 40
             
         class Whale(Points):
             # Amount * AmountOfTimesBought
@@ -47,8 +46,7 @@ class Dailies(Points):
         JuicyStaminaJellyChallenge=100
         FreeFromShop=40
 
-    class EternalPass(Points):
-        PaidEternalPassRewardLandmark=100 # Sleepy Pavlova Hanging Garden
+    PaidEternalPassRewardLandmark=100 # Sleepy Pavlova Hanging Garden
 
 # region non-dailies
 def getNonDailiesDone(EternalPass: bool, whale: bool):
@@ -57,7 +55,7 @@ def getNonDailiesDone(EternalPass: bool, whale: bool):
     totalPoints += sum([entry.points for entry in OneTimeSources.OtherSources])
 
     if EternalPass:
-        totalPoints += OneTimeSources.PaidSources.EternalPass.PaidEternalPass.points
+        totalPoints += OneTimeSources.PaidSources.PaidEternalPass.points
     if whale:
         totalPoints += sum([entry.points for entry in OneTimeSources.PaidSources.Whale])
 
@@ -68,7 +66,7 @@ def doDaily(CurrentPoints: int, CurrentDailies: int, EternalPass: bool):
 
     CurrentPoints+=sum([entry.points for entry in Dailies.Standard])
     if EternalPass:
-        CurrentPoints+=Dailies.EternalPass.PaidEternalPassRewardLandmark.points
+        CurrentPoints+=Dailies.PaidEternalPassRewardLandmark.points
     CurrentDailies+=1
 
     return CurrentPoints, CurrentDailies
