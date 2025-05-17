@@ -86,7 +86,7 @@ EternalPass = getNonDailiesDone(
     EternalPassMaster=False,
     Whale=False
 )
-EternalPassMaster = getNonDailiesDone(
+EternalPassMaster = getNonDailiesDone( # Assuming that you will only buy this if you buy the pass
     EternalPass=True,
     EternalPassMaster=True,
     Whale=False
