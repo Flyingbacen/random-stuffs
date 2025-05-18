@@ -28,6 +28,16 @@ class OneTimeSources(Points):
         FreeEternalPass=100+100+100+100+100+200 # Level: 1, 15, 25, 35, 40
         DailyGifts=100*12+200+300 # From new update, once per day for 14 days
         BossRush=100+200+700 # Stage: 3, 7, 25
+    
+    class PathOfSlothTasks(Points):
+        # Assuming that you will do these missions once you obtain her
+        LVL1=200*4
+        
+        # counting the 2* mission from LVL 1 since that will most likely only be done after the rest are complete
+        LVL2=2000+400*4
+
+        # Same as above for 4*
+        LVL3=4000+600*5
 
     # region paid sources
     class PaidSources(Points):
@@ -40,6 +50,10 @@ class OneTimeSources(Points):
             PaidSuperCrystalPackage=2200*5
             PaidGenerousShoppingBox=800*4
             PaidShop=800*9+1600*9+3600*9+6000*9+10800*9
+
+        EternalSugarCookieFirstGreetings=1000 
+        # Almost certainly you will get some after promoting to 1* too, but I'm too lazy to research that
+        # Only got that info cause I got her :3
 
 # region dailies
 class Dailies(Points):
@@ -62,18 +76,29 @@ def getNonDailiesDone(EternalPass: bool, EternalPassMaster: bool, Whale: bool):
             totalPoints += OneTimeSources.PaidSources.EternalPass.PaidEternalPassMasterHotDealPackage.points
     if Whale:
         totalPoints += sum([entry.points for entry in OneTimeSources.PaidSources.Whale])
+        totalPoints += OneTimeSources.PaidSources.EternalSugarCookieFirstGreetings.points
 
     return totalPoints
 
 # region do daily
-def doDaily(CurrentPoints: int, CurrentDailies: int, EternalPass: bool):
+def doDaily(CurrentPoints: int, CurrentDailies: int, EternalPass: bool, LVL1: bool = False, LVL2: bool = False, LVL3: bool = False):
 
     CurrentPoints+=sum([entry.points for entry in Dailies.Standard])
     if EternalPass:
         CurrentPoints+=Dailies.PaidEternalPassRewardLandmark.points
     CurrentDailies+=1
 
-    return CurrentPoints, CurrentDailies
+    if CurrentPoints >= 25000 and not LVL1:
+        CurrentPoints += OneTimeSources.PathOfSlothTasks.LVL1.points
+        LVL1 = True
+    if CurrentPoints >= 75000 and not LVL2:
+        CurrentPoints += OneTimeSources.PathOfSlothTasks.LVL2.points
+        LVL2 = True
+    if CurrentPoints >= 125000 and not LVL3:
+        CurrentPoints += OneTimeSources.PathOfSlothTasks.LVL3.points
+        LVL3 = True
+
+    return CurrentPoints, CurrentDailies, LVL1, LVL2, LVL3
             
 
 F2P = getNonDailiesDone(
@@ -109,48 +134,54 @@ EternalPassMasterAndWhale = getNonDailiesDone(
 
 # region f2p
 CurrentDailies = 0
+LVL1, LVL2, LVL3 = False, False, False
 while F2P < PointsNeeded:
-    F2P, CurrentDailies = doDaily(F2P, CurrentDailies, False)
+    F2P, CurrentDailies, LVL1, LVL2, LVL3 = doDaily(F2P, CurrentDailies, False, LVL1, LVL2, LVL3)
     # print(f"Current points: {PointsWithNoDailiesAndNotPaid}, Current dailies: {CurrentDailies}")
 print(f"Total points with no dailies and no Eternal Pass: {getNonDailiesDone(EternalPass=False, EternalPassMaster=False, Whale=False )}")
 print(f"Total dailies: {CurrentDailies}")
 
 # region Eternal Pass
 CurrentDailies = 0
+LVL1, LVL2, LVL3 = False, False, False
 while EternalPass < PointsNeeded:
-    EternalPass, CurrentDailies = doDaily(EternalPass, CurrentDailies, True)
+    EternalPass, CurrentDailies, LVL1, LVL2, LVL3 = doDaily(EternalPass, CurrentDailies, True, LVL1, LVL2, LVL3)
     # print(f"Current points: {PointsWithNoDailiesAndPaid}, Current dailies: {CurrentDailies}")
 print(f"Total points with no dailies and Eternal Pass: {getNonDailiesDone(EternalPass=True, EternalPassMaster=False, Whale=False)}")
 print(f"Total dailies: {CurrentDailies}")
 
 # region Eternal Pass and Master Hot Deal Package
 CurrentDailies = 0
+LVL1, LVL2, LVL3 = False, False, False
 while EternalPassMaster < PointsNeeded:
-    EternalPassMaster, CurrentDailies = doDaily(EternalPassMaster, CurrentDailies, True)
+    EternalPassMaster, CurrentDailies, LVL1, LVL2, LVL3 = doDaily(EternalPassMaster, CurrentDailies, True, LVL1, LVL2, LVL3)
     # print(f"Current points: {PointsWithNoDailiesAndPaid}, Current dailies: {CurrentDailies}")
 print(f"Total points with no dailies and Eternal Pass Master: {getNonDailiesDone(EternalPass=True, EternalPassMaster=True, Whale=False)}")
 print(f"Total dailies: {CurrentDailies}")
 
 # region whale
 CurrentDailies = 0
+LVL1, LVL2, LVL3 = False, False, False
 while Whale < PointsNeeded:
-    Whale, CurrentDailies = doDaily(Whale, CurrentDailies, False)
+    Whale, CurrentDailies, LVL1, LVL2, LVL3 = doDaily(Whale, CurrentDailies, False, LVL1, LVL2, LVL3)
     # print(f"Current points: {PointsWithNoDailiesAndPaid}, Current dailies: {CurrentDailies}")
 print(f"Total points with no dailies, No Eternal Pass, and shop whale: {getNonDailiesDone(EternalPass=False, EternalPassMaster=False, Whale=True)}")
 print(f"Total dailies: {CurrentDailies}")
 
 # region Eternal Pass and shop whale
 CurrentDailies = 0
+LVL1, LVL2, LVL3 = False, False, False
 while EternalPassAndWhale < PointsNeeded:
-    EternalPassAndWhale, CurrentDailies = doDaily(EternalPassAndWhale, CurrentDailies, True)
+    EternalPassAndWhale, CurrentDailies, LVL1, LVL2, LVL3 = doDaily(EternalPassAndWhale, CurrentDailies, True, LVL1, LVL2, LVL3)
     # print(f"Current points: {PointsWithNoDailiesAndPaid}, Current dailies: {CurrentDailies}")
 print(f"Total points with no dailies, Eternal Pass, and shop whale: {getNonDailiesDone(EternalPass=True, EternalPassMaster=False, Whale=True,) }")
 print(f"Total dailies: {CurrentDailies}")
 
 # region Eternal Pass Master and shop whale
 CurrentDailies = 0
+LVL1, LVL2, LVL3 = False, False, False
 while EternalPassMasterAndWhale < PointsNeeded:
-    EternalPassMasterAndWhale, CurrentDailies = doDaily(EternalPassMasterAndWhale, CurrentDailies, True)
+    EternalPassMasterAndWhale, CurrentDailies, LVL1, LVL2, LVL3 = doDaily(EternalPassMasterAndWhale, CurrentDailies, True, LVL1, LVL2, LVL3)
     # print(f"Current points: {PointsWithNoDailiesAndPaid}, Current dailies: {CurrentDailies}")
 print(f"Total points with no dailies, Eternal Pass Master, and shop whale: {getNonDailiesDone(EternalPass=True, EternalPassMaster=True, Whale=True)}")
 print(f"Total dailies: {CurrentDailies}")
