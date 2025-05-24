@@ -40,7 +40,7 @@ Scripts for ps99 have been moved <a href="https://github.com/Flyingbacen/PS99-sc
         <ul>
             <li><kbd>s</kbd>: take a screenshot and/or translate</li>
             <li><kbd>d</kbd>: clear terminal output</li>
-            <li><kbd><kbd>shift</kbd>+<kbd>[</kbd></kbd>: Change the region</li>
+            <li><kbd>[</kbd>: Change the region</li>
             <ul>
                 <li>after activating this keybind, press enter on the top right region, and then enter on the bottom right region. The enter key shouldn't activate anything on the program itself.</li>
             </ul>

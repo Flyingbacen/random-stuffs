@@ -6,6 +6,7 @@ from translate import Translator
 import numpy as np
 import os
 import pyautogui
+import json
 from win32gui import GetWindowText as WindowTitle, GetForegroundWindow as ForegroundWindow
 
 if os.path.exists('config.json'):
@@ -38,7 +39,7 @@ if not TRANSLATE and not IMAGE_TO_CLIPBOARD:
 if TRANSLATE:
     print('loading easyocr...')
     import easyocr
-    reader = easyocr.Reader(['ja', 'en'])
+    reader = easyocr.Reader(['en', 'ja'])
     translator = Translator(to_lang='en', from_lang='ja')
     print('easyocr loaded')
 
@@ -64,13 +65,10 @@ def take_screenshot():
         win32clipboard.CloseClipboard()
     if TRANSLATE: np_screenshot = np.array(screenshot)
     if TRANSLATE:
-        easyocr_result = reader.readtext(np_screenshot)
-        # print(easyocr_result) # Debug
+        easyocr_result = reader.readtext(np_screenshot, detail=0, paragraph=True)
         print('---\nDetected text\n')
-        for result in easyocr_result:
-            print(result[1])
-            rresult += result[1]
-        if rresult == '': return
+        print(easyocr_result[0])
+        if easyocr_result[0] == '': return
 
         print('---\nTranslated text\n')
         print(translator.translate(rresult))
@@ -104,6 +102,6 @@ print(f'Window name: {WINDOW_NAME}')
 print("s: screenshot/translate\nd: clear screen\nshift+[: set region\nshift+r: reset region to default\n")
 keyboard.add_hotkey('s', take_screenshot)
 keyboard.add_hotkey('d', cls)
-keyboard.add_hotkey('shift+[', change_region)
+keyboard.add_hotkey('[', change_region)
 keyboard.add_hotkey('shift+r', change_region, args=[True])
 keyboard.wait()
