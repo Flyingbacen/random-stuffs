@@ -59,7 +59,7 @@ def calculate():
   print()
 
   try: 
-    CriticalKills = reader.readtext(np.array(CritKillScreenshot))[0][1].replace("O", "0").replace(" ", "").replace("I", "1")
+    CriticalKills = reader.readtext(np.array(CritKillScreenshot))[0][1].replace("O", "0").replace(" ", "").replace("I", "1") # type: ignore
     CriticalKills = int(CriticalKills)
   except IndexError: print("Error: OCR found no text for critical kills."); return
   except ValueError:
@@ -68,7 +68,7 @@ def calculate():
     return
   
   try: 
-    KillPercent = reader.readtext(np.array(KillPercentScreenshot))[0][1].replace(" ", "").replace("O", "0").replace("%", "").replace("I", "1")
+    KillPercent = reader.readtext(np.array(KillPercentScreenshot))[0][1].replace(" ", "").replace("O", "0").replace("%", "").replace("I", "1") # type: ignore
     KillPercent = float(KillPercent) / 100
   except IndexError: print("Error: OCR found no text for kill percent."); return
   except ValueError:
