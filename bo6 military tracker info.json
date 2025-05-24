@@ -9,7 +9,9 @@
       "GOBLIN MK2": 2000,
       "AS VAL": 2012,
       "KRIG C": 2000,
-      "CYPHER 091": 0
+      "CYPHER 091": 0,
+      "KILO 141": 0,
+      "CR-56 AMAX": 0
     },
     "Submachine Guns": {
       "C9": 2000,
@@ -19,7 +21,8 @@
       "JACKAL PDW": 2000,
       "KOMPAKT 92": 2000,
       "SAUG": 2000,
-      "PPSH-41": 0
+      "PPSH-41": 0,
+      "LADRA": 0
     },
     "Shotguns": {
       "MARINE SP": 2280,
@@ -27,7 +30,7 @@
       "Maelstrom": 0
     },
     "Light Machine Guns": {
-      "PU-21": 3,
+      "PU-21": 74,
       "XMG": 49,
       "GPMG-7": 2000,
       "FENG 82": 0
@@ -36,13 +39,15 @@
       "SWAT 5.56": 2000,
       "TSARKOV 7.62": 2000,
       "AEK-973": 2000,
-      "DM-10": 2000
+      "DM-10": 2000,
+      "TR2": 0
     },
     "Sniper Rifles": {
       "LW3A1 FROSTLINE": 975,
       "SVD": 2216,
       "LR 7.62": 2000,
-      "AMR MOD 4": 2227
+      "AMR MOD 4": 2227,
+      "HDR": 0
     },
     "Pistols": {
       "9MM PM": 2138,
@@ -55,13 +60,21 @@
       "HE-1": 2000
     },
     "Special": {
-      "SIRIN 9MM": 415
+      "SIRIN 9MM": 415,
+      "D1.3 SECTOR": 0,
+      "NAIL GUN": 0
     },
     "Melee": {
       "KNIFE": 2000,
       "BASEBALL BAT": 2000,
       "POWER DRILL": 2000,
-      "CLEAVER": 42
+      "CLEAVER": 80,
+      "SKATEBOARD": 1,
+      "KATANAS": 0,
+      "BO STAFF": 0,
+      "SAI": 26,
+      "NUNCHAKU": 0,
+      "KALI STICKS": 0
     }
   }
 }
