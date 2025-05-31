@@ -28,6 +28,7 @@ class OneTimeSources(Points):
         FreeEternalPass=100+100+100+100+100+200 # Level: 1, 15, 25, 35, 40
         DailyGifts=100*12+200+300 # From new update, once per day for 14 days
         BossRush=100+200+700 # Stage: 3, 7, 25
+        MonsterMenace=1000 # Level 8
     
     class PathOfSlothTasks(Points):
         # Assuming that you will do these missions once you obtain her
