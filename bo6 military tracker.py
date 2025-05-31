@@ -81,8 +81,8 @@ def calculate():
   if DEBUG:
     global counter
     counter += 1
-    CritKillScreenshot.save(f"debug_critical_kills-{counter}.png")
-    KillPercentScreenshot.save(f"debug_kill_percent-{counter}.png")
+    CritKillScreenshot.save(f"./debug/debug_critical_kills-{counter}.png")
+    KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}.png")
 
   roundsLeft = ceil((int(TargetKills)-CriticalKills)*(1+abs(1-KillPercent))/int(EnemiesPerRound))
   if roundsLeft < 10: print("remaining zombies: " + str(int(TargetKills)-CriticalKills))
