@@ -6,7 +6,7 @@ import keyboard
 import json
 
 reader = easyocr.Reader(['en'])
-print("\033[H\033[J")
+import os; os.system("cls")
 LastCriticalKills = 0
 
 while True:
