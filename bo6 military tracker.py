@@ -4,8 +4,10 @@ from pyautogui import screenshot
 from math import ceil
 import keyboard
 import json
+
 DEBUG = True # Saves screenshots taken
 counter = 0 # used with DEBUG
+TargetKills: int
 
 reader = easyocr.Reader(['en'])
 import os; os.system("cls")
@@ -48,13 +50,13 @@ def changeTargets():
     print(str(idx + 1) + ". " + gun + ": " + (str(TotalKills) if TotalKills < 2000 else "Complete"))
   SelectedGun = Guns[int(input("Gun: ")) - 1]
 
-  TargetKills: int = 2000 - JsonInformation["Weapons"][SelectedCategory][SelectedGun]
+  TargetKills = 2000 - JsonInformation["Weapons"][SelectedCategory][SelectedGun]
 
   EnemiesPerRound = int(input("Enemies per round: "))
 
 
 def calculate() -> None:
-  global TargetKills, EnemiesPerRound, LastCriticalKills, JsonInformation, SelectedCategory, SelectedGun
+  global TargetKills, EnemiesPerRound, LastCriticalKills, JsonInformation, SelectedCategory, SelectedGun, counter
 
   CritKillScreenshot = screenshot(region = (495, 625, 543, 648)) # Critical kills
   KillPercentScreenshot = screenshot(region = (669, 627, 716, 645)) # Kill percent
@@ -70,7 +72,6 @@ def calculate() -> None:
     ValueError_Crit = True
   finally:
     if DEBUG:
-      global counter
       counter += 1
       CriticalKillScreenshot.save(f"./debug/debug_critical_kills-{counter}-{"no_text" if IndexError_Crit else "Failed" if ValueError_Crit else "success"}.png")
     if IndexError_Crit or ValueError_Crit:
@@ -88,7 +89,6 @@ def calculate() -> None:
     ValueError_Percent = True
   finally:
     if DEBUG:
-      global counter
       counter += 1
       KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}-{"no_text" if IndexError_Percent else "Failed" if ValueError_Percent else "success"}.png")
     if IndexError_Percent or ValueError_Percent:
