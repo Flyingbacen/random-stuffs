@@ -11,7 +11,8 @@
       "KRIG C": 2000,
       "CYPHER 091": 0,
       "KILO 141": 0,
-      "CR-56 AMAX": 0
+      "CR-56 AMAX": 0,
+      "FFAR 1": 0
     },
     "Submachine Guns": {
       "C9": 2000,
@@ -22,7 +23,8 @@
       "KOMPAKT 92": 2000,
       "SAUG": 2000,
       "PPSH-41": 0,
-      "LADRA": 632
+      "LADRA": 632,
+      "LC10": 0
     },
     "Shotguns": {
       "MARINE SP": 2280,
