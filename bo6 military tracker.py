@@ -58,14 +58,23 @@ def changeTargets():
 def calculate() -> None:
   global TargetKills, EnemiesPerRound, LastCriticalKills, JsonInformation, SelectedCategory, SelectedGun, counter
 
-  CritKillScreenshot = screenshot(region = (495, 625, 543, 648)) # Critical kills
-  KillPercentScreenshot = screenshot(region = (669, 627, 716, 645)) # Kill percent
+  CriticalKillScreenshot = screenshot(region = (495, 625, 48, 23)) # Critical kills
+  KillPercentScreenshot = screenshot(region = (669, 627, 47, 18)) # Kill percent
   print()
 
   try: 
     CriticalKills: str = reader.readtext(np.array(CriticalKillScreenshot))[0][1].replace("O", "0").replace(" ", "").replace("I", "1") # type: ignore
     CriticalKills: int = int(CriticalKills)
-  except IndexError: print("Error: OCR found no text for critical kills."); return
+  except IndexError:
+    try: #Try a tighter fit
+      CriticalKillScreenshot_Small = screenshot(region = (495+15, 625, 34, 16))
+      CriticalKills: str = reader.readtext(np.array(CriticalKillScreenshot_Small))[0][1].replace("O", "0").replace(" ", "").replace("I", "1") # type: ignore
+      CriticalKills: int = int(CriticalKills)
+    except IndexError:
+      print("Error: OCR found no text for critical kills.")
+      IndexError_Crit = True
+      CriticalKillScreenshot_Small.save(f"./debug/debug_critical_kills-{counter}-no_text-small.png")
+      
   except ValueError:
     print("Error: OCR failed to read the critical kills.")
     print("Critical kills: " + str(CriticalKills))
