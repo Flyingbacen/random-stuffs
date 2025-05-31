@@ -1,6 +1,0 @@
-.gitignore
-*test*
-*.json
-!bo6*info.json
-bo6 military tracker info.json
-screenshot.py
