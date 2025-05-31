@@ -48,12 +48,12 @@ def changeTargets():
     print(str(idx + 1) + ". " + gun + ": " + (str(TotalKills) if TotalKills < 2000 else "Complete"))
   SelectedGun = Guns[int(input("Gun: ")) - 1]
 
-  TargetKills = 2000 - JsonInformation["Weapons"][SelectedCategory][SelectedGun]
+  TargetKills: int = 2000 - JsonInformation["Weapons"][SelectedCategory][SelectedGun]
 
   EnemiesPerRound = int(input("Enemies per round: "))
 
 
-def calculate():
+def calculate() -> None:
   global TargetKills, EnemiesPerRound, LastCriticalKills, JsonInformation, SelectedCategory, SelectedGun
 
   CritKillScreenshot = screenshot(region = (495, 625, 543, 648)) # Critical kills
@@ -61,28 +61,38 @@ def calculate():
   print()
 
   try: 
-    CriticalKills = reader.readtext(np.array(CritKillScreenshot))[0][1].replace("O", "0").replace(" ", "").replace("I", "1") # type: ignore
-    CriticalKills = int(CriticalKills)
+    CriticalKills: str = reader.readtext(np.array(CriticalKillScreenshot))[0][1].replace("O", "0").replace(" ", "").replace("I", "1") # type: ignore
+    CriticalKills: int = int(CriticalKills)
   except IndexError: print("Error: OCR found no text for critical kills."); return
   except ValueError:
     print("Error: OCR failed to read the critical kills.")
-    print("Critical kills: " + CriticalKills)
-    return
+    print("Critical kills: " + str(CriticalKills))
+    ValueError_Crit = True
+  finally:
+    if DEBUG:
+      global counter
+      counter += 1
+      CriticalKillScreenshot.save(f"./debug/debug_critical_kills-{counter}-{"no_text" if IndexError_Crit else "Failed" if ValueError_Crit else "success"}.png")
+    if IndexError_Crit or ValueError_Crit:
+      return
   
   try: 
-    KillPercent = reader.readtext(np.array(KillPercentScreenshot))[0][1].replace(" ", "").replace("O", "0").replace("%", "").replace("I", "1") # type: ignore
-    KillPercent = float(KillPercent) / 100
-  except IndexError: print("Error: OCR found no text for kill percent."); return
+    KillPercent: str = reader.readtext(np.array(KillPercentScreenshot))[0][1].replace(" ", "").replace("O", "0").replace("%", "").replace("I", "1") # type: ignore
+    KillPercent: float = float(KillPercent) / 100
+  except IndexError:
+    print("Error: OCR found no text for kill percent.")
+    IndexError_Percent = True
   except ValueError:
     print("Error: OCR failed to read the kill percent.")
-    print("Kill percent: " + KillPercent)
-    return
-
-  if DEBUG:
-    global counter
-    counter += 1
-    CritKillScreenshot.save(f"./debug/debug_critical_kills-{counter}.png")
-    KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}.png")
+    print("Kill percent: " + str(KillPercent))
+    ValueError_Percent = True
+  finally:
+    if DEBUG:
+      global counter
+      counter += 1
+      KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}-{"no_text" if IndexError_Percent else "Failed" if ValueError_Percent else "success"}.png")
+    if IndexError_Percent or ValueError_Percent:
+      return
 
   roundsLeft = ceil((int(TargetKills)-CriticalKills)*(1+abs(1-KillPercent))/int(EnemiesPerRound))
   if roundsLeft < 10: print("remaining zombies: " + str(int(TargetKills)-CriticalKills))
