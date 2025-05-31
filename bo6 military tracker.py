@@ -4,6 +4,8 @@ from pyautogui import screenshot
 from math import ceil
 import keyboard
 import json
+DEBUG = True # Saves screenshots taken
+counter = 0 # used with DEBUG
 
 reader = easyocr.Reader(['en'])
 import os; os.system("cls")
@@ -75,6 +77,12 @@ def calculate():
     print("Error: OCR failed to read the kill percent.")
     print("Kill percent: " + KillPercent)
     return
+
+  if DEBUG:
+    global counter
+    counter += 1
+    CritKillScreenshot.save(f"debug_critical_kills-{counter}.png")
+    KillPercentScreenshot.save(f"debug_kill_percent-{counter}.png")
 
   roundsLeft = ceil((int(TargetKills)-CriticalKills)*(1+abs(1-KillPercent))/int(EnemiesPerRound))
   if roundsLeft < 10: print("remaining zombies: " + str(int(TargetKills)-CriticalKills))
