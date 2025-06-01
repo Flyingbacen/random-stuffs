@@ -5,8 +5,10 @@ from math import ceil
 import keyboard
 import json
 import pypresence
+import time
 
 rpc = True
+starttime = time.time() 
 DEBUG = True # Saves screenshots taken
 counter = 0 # used with DEBUG
 TargetKills: int
@@ -105,7 +107,7 @@ def calculate() -> None:
   print("Estimated Rounds left: " + str(roundsLeft))
 
   if rpc:
-    set_discord_rich_presence(1378753267105923123, f"{SelectedCategory} - {SelectedGun.capitalize()}", f"{roundsLeft} rounds left - {KillPercent}", "afterlife", "Made by <@717471432816459840>")
+    set_discord_rich_presence(1378753267105923123, f"{SelectedCategory} - {SelectedGun.capitalize()}", f"{str(roundsLeft)} rounds left - {str(KillPercent*100)}% Critical Kill accuracy", "gold", "Made by @Flyingbacen on Github")
   difference = CriticalKills - LastCriticalKills
   JsonInformation["Weapons"][SelectedCategory][SelectedGun] += difference
   LastCriticalKills = CriticalKills
@@ -129,6 +131,7 @@ def set_discord_rich_presence(client_id, details, state, large_image=None, large
   presence_data = {
     "details": details,
     "state": state,
+    "start": int(starttime)
   }
   if large_image:
     presence_data["large_image"] = large_image
