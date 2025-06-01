@@ -74,39 +74,34 @@ def calculate() -> None:
       CriticalKills: int = int(CriticalKills)
     except IndexError:
       print("Error: OCR found no text for critical kills.")
-      IndexError_Crit = True
       CriticalKillScreenshot_Small.save(f"./debug/debug_critical_kills-{counter}-no_text-small.png")
-      
+      counter += 1
+      if DEBUG: CriticalKillScreenshot.save(f"./debug/debug_critical_kills-{counter}.png")
+      return
   except ValueError:
     print("Error: OCR failed to read the critical kills.")
     print("Critical kills: " + str(CriticalKills))
-    ValueError_Crit = True
-  finally:
-    if DEBUG:
-      counter += 1
-      CriticalKillScreenshot.save(f"./debug/debug_critical_kills-{counter}-{"no_text" if IndexError_Crit else "Failed" if ValueError_Crit else "success"}.png")
-    if IndexError_Crit or ValueError_Crit:
-      return
+    counter += 1
+    if DEBUG: CriticalKillScreenshot.save(f"./debug/debug_critical_kills-{counter}.png")
+    return
   
   try: 
-    KillPercent: str = reader.readtext(np.array(KillPercentScreenshot))[0][1].replace(" ", "").replace("O", "0").replace("%", "").replace("I", "1") # type: ignore
+    KillPercent: str = reader.readtext(np.array(KillPercentScreenshot))[0][1].replace(" ", "").replace("O", "0").replace("%", "").replace("I", "1").replace("\"", "") # type: ignore
     KillPercent: float = float(KillPercent) / 100
   except IndexError:
     print("Error: OCR found no text for kill percent.")
-    IndexError_Percent = True
+    counter += 1
+    if DEBUG: KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}.png")
+    return
   except ValueError:
     print("Error: OCR failed to read the kill percent.")
     print("Kill percent: " + str(KillPercent))
-    ValueError_Percent = True
-  finally:
-    if DEBUG:
-      counter += 1
-      KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}-{"no_text" if IndexError_Percent else "Failed" if ValueError_Percent else "success"}.png")
-    if IndexError_Percent or ValueError_Percent:
-      return
+    counter += 1
+    if DEBUG: KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}.png")
+    return
 
   roundsLeft = ceil((int(TargetKills)-CriticalKills)*(1+abs(1-KillPercent))/int(EnemiesPerRound))
-  if roundsLeft < 10: print("remaining zombies: " + str(int(TargetKills)-CriticalKills))
+  if roundsLeft <= 10: print("remaining zombies: " + str(int(TargetKills)-CriticalKills))
   print("Estimated Rounds left: " + str(roundsLeft))
 
   if rpc:
