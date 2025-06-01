@@ -4,7 +4,9 @@ from pyautogui import screenshot
 from math import ceil
 import keyboard
 import json
+import pypresence
 
+rpc = True
 DEBUG = True # Saves screenshots taken
 counter = 0 # used with DEBUG
 TargetKills: int
@@ -107,6 +109,8 @@ def calculate() -> None:
   if roundsLeft < 10: print("remaining zombies: " + str(int(TargetKills)-CriticalKills))
   print("Estimated Rounds left: " + str(roundsLeft))
 
+  if rpc:
+    set_discord_rich_presence(1378753267105923123, f"{SelectedCategory} - {SelectedGun.capitalize()}", f"{roundsLeft} rounds left - {KillPercent}", "afterlife", "Made by <@717471432816459840>")
   difference = CriticalKills - LastCriticalKills
   JsonInformation["Weapons"][SelectedCategory][SelectedGun] += difference
   LastCriticalKills = CriticalKills
@@ -114,6 +118,28 @@ def calculate() -> None:
   # Use for debug
   # print(str(TargetKills) + " kills\n" + str(CriticalKills) + " critical kills\n" + str(KillPercent) + "% kill percent\n" + EnemiesPerRound + " enemies per round\n")
 
+def set_discord_rich_presence(client_id, details, state, large_image=None, large_text=None):
+  """
+  Sets Discord Rich Presence using pypresence.
+
+  Args:
+    client_id (str): Your application's client ID.
+    details (str): The first line of the presence.
+    state (str): The second line of the presence.
+    large_image (str, optional): Key of the large image asset.
+    large_text (str, optional): Tooltip for the large image.
+  """
+  rpc = pypresence.Presence(client_id)
+  rpc.connect()
+  presence_data = {
+    "details": details,
+    "state": state,
+  }
+  if large_image:
+    presence_data["large_image"] = large_image
+  if large_text:
+    presence_data["large_text"] = large_text
+  rpc.update(**presence_data)
 
 changeTargets()
 keyboard.add_hotkey("+", calculate)
