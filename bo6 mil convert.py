@@ -7,5 +7,5 @@ for category in data["Weapons"]:
   for weapon in data["Weapons"][category]:
     data["Weapons"][category][weapon] = 0
 
-with open("bo6 military tracker info upload.json", "w") as file:
+with open("bo6 military tracker info.json", "w") as file:
   json.dump(data, file, indent=2)
