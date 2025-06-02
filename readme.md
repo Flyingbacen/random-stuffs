@@ -80,6 +80,7 @@ Scripts for ps99 have been moved <a href="https://github.com/Flyingbacen/PS99-sc
         - <kbd>-</kbd>: Change currently tracked gun. Will save the current gun's information.
             - Use the <kbd>+</kbd> and <kbd>-</kbd> when ending a match to save stats.
     - **Make sure to save your stats at the end of a match**
+    - *Instructions for WZHub will likely not be provided as it is a private api and permission has not been given.* Look at the code and the site to figure out how to set it up at your own account's risk.
 
 - [Roblox Clicklock/DirectX Clicklock](./clicklock.py) -> Made for a mining game I was playing and wanted to be lazy. Because roblox is a dumbie though, Windows builtin clicklock wouldn't work.
     - <kbd>f</kbd> to toggle clicklock. Pressing other keys when you press f will cause it to do nothing
