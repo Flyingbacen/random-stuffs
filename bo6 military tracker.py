@@ -47,7 +47,7 @@ while True:
         for weapon in data["Weapons"][category]:
           data["Weapons"][category][weapon] = 0
 
-      with open("bo6 military tracker info upload.json", "w") as file:
+      with open("bo6 military tracker info.json", "w") as file:
         json.dump(data, file, indent=2)
     else:
       input("This program requires a JSON file to function. Press enter to exit.")
@@ -59,7 +59,7 @@ def SaveJsonInformation():
     json.dump(JsonInformation, file, indent = 2)
 
 def changeTargets():
-  global TargetKills, EnemiesPerRound, category, gun, SelectedCategory, SelectedGun, JsonInformation
+  global TargetKills, EnemiesPerRound, category, gun, SelectedCategory, SelectedGun, JsonInformation, StandardKills
 
   SaveJsonInformation()
   print("Weapon's Information saved to file.\n")
@@ -74,6 +74,10 @@ def changeTargets():
     TotalKills = JsonInformation["Weapons"][SelectedCategory][gun]
     print(str(idx + 1) + ". " + gun + ": " + (str(TotalKills) if TotalKills < 2000 else "Complete"))
   SelectedGun = Guns[int(input("Gun: ")) - 1]
+  if SelectedGun in JsonInformation["Standard Kills"]:
+    StandardKills = True
+  else:
+    StandardKills = False
 
   TargetKills = 2000 - JsonInformation["Weapons"][SelectedCategory][SelectedGun]
 
@@ -81,10 +85,16 @@ def changeTargets():
 
 
 def calculate() -> None:
-  global TargetKills, EnemiesPerRound, LastCriticalKills, JsonInformation, SelectedCategory, SelectedGun, counter
+  global TargetKills, EnemiesPerRound, LastCriticalKills, JsonInformation, SelectedCategory, SelectedGun, counter, StandardKills
 
-  CriticalKillScreenshot = screenshot(region = (495, 625, 48, 23)) # Critical kills
-  KillPercentScreenshot = screenshot(region = (669, 627, 47, 18)) # Kill percent
+  if not StandardKills:
+    CriticalKillScreenshot = screenshot(region = (495, 625, 48, 23)) # Critical kills
+    KillPercentScreenshot = screenshot(region = (669, 627, 47, 18)) # Kill percent
+  else:
+    CriticalKillScreenshot = screenshot(region = (495, 553, 48, 23)) #Keeping the variable the same for ease of use
+    KillPercentScreenshot = None
+    KillPercent = 100
+  
   print()
 
   try: 
@@ -108,19 +118,22 @@ def calculate() -> None:
     if DEBUG: CriticalKillScreenshot.save(f"./debug/debug_critical_kills-{counter}.png")
     return
   
-  try: 
-    KillPercent: str = reader.readtext(np.array(KillPercentScreenshot))[0][1].replace(" ", "").replace("O", "0").replace("%", "").replace("I", "1").replace("\"", "") # type: ignore
+  try:
+    if KillPercentScreenshot is not None:
+      KillPercent: str = reader.readtext(np.array(KillPercentScreenshot))[0][1].replace(" ", "").replace("O", "0").replace("%", "").replace("I", "1").replace("\"", "") # type: ignore
     KillPercent: float = float(KillPercent) / 100
   except IndexError:
-    print("Error: OCR found no text for kill percent.")
-    counter += 1
-    if DEBUG: KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}.png")
+    if KillPercentScreenshot is not None:
+      print("Error: OCR found no text for kill percent.")
+      counter += 1
+      if DEBUG: KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}.png")
     return
   except ValueError:
-    print("Error: OCR failed to read the kill percent.")
-    print("Kill percent: " + str(KillPercent))
-    counter += 1
-    if DEBUG: KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}.png")
+    if KillPercentScreenshot is not None:
+      print("Error: OCR failed to read the kill percent.")
+      print("Kill percent: " + str(KillPercent))
+      counter += 1
+      if DEBUG: KillPercentScreenshot.save(f"./debug/debug_kill_percent-{counter}.png")
     return
 
   roundsLeft = ceil((int(TargetKills)-CriticalKills)*(1+abs(1-KillPercent))/int(EnemiesPerRound))
@@ -221,7 +234,7 @@ def updateWZHub(weapon: str, milestone: int) -> None:
   response = requests.post(url=url, json=body, headers=headers)
   try:
     if response.json()["success"] and response.status_code == 200:
-      print("\nSuccessfully updated WZhub")
+      print(F"\nSuccessfully updated WZhub with milestone {milestones[milestone]}")
     else:
       print(response)
   except json.JSONDecodeError:
