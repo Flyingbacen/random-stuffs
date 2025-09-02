@@ -9,6 +9,9 @@ import pyautogui
 import json
 from win32gui import GetWindowText as WindowTitle, GetForegroundWindow as ForegroundWindow
 
+global translatedStrings
+translatedStrings = []
+
 if os.path.exists('config.json'):
     import json
     with open('./config.json') as f:
@@ -48,11 +51,10 @@ print("activate the window you want to translate/screenshot and press /")
 keyboard.wait('/', suppress=True)
 WINDOW_NAME = WindowTitle(ForegroundWindow())
 
-def take_screenshot():
+def take_screenshot(ignorelist: bool = False):
     if WINDOW_NAME != WindowTitle(ForegroundWindow()):
         return
     global REGION
-    rresult = ''
     screenshot = ImageGrab.grab(bbox=REGION)
     if IMAGE_TO_CLIPBOARD:
         output = io.BytesIO()
@@ -63,17 +65,30 @@ def take_screenshot():
         win32clipboard.EmptyClipboard()
         win32clipboard.SetClipboardData(win32clipboard.CF_DIB, bmp_data)
         win32clipboard.CloseClipboard()
-    if TRANSLATE: np_screenshot = np.array(screenshot)
     if TRANSLATE:
-        easyocr_result = reader.readtext(np_screenshot, detail=0, paragraph=True)
+        np_screenshot = np.array(screenshot)
+        easyocr_result = reader.readtext(np_screenshot, detail=0, paragraph=True, )
+        try:
+            if easyocr_result[0] in translatedStrings and not ignorelist:
+                return
+        except IndexError:
+            print('No text detected')
+            return
+        
         print('---\nDetected text\n')
-        print(easyocr_result[0])
+        for paragraph in easyocr_result:
+            print(paragraph)
+
+        translatedStrings.extend(easyocr_result)
+        if len(translatedStrings) > 5:
+            translatedStrings[:] = translatedStrings[-5:]
+        if easyocr_result[0] == '':
+            return
         if easyocr_result[0] == '': return
 
         print('---\nTranslated text\n')
-        print(translator.translate(rresult))
-        # for result in easyocr_result: # old version, slower and depending on the sentence structure made less sense, and hurts the api
-        #     print(translator.translate(result[1]))
+        for paragraph in easyocr_result:
+            print(translator.translate(paragraph))
 
 def change_region(default=False):
     global REGION
@@ -99,9 +114,10 @@ def cls():
 
 
 print(f'Window name: {WINDOW_NAME}')
-print("s: screenshot/translate\nd: clear screen\nshift+[: set region\nshift+r: reset region to default\n")
+print("s: screenshot/translate\nd: clear screen\n[: set region\nshift+r: reset region to default\n")
 keyboard.add_hotkey('s', take_screenshot)
+keyboard.add_hotkey('shift+s', take_screenshot, args=(True,))
 keyboard.add_hotkey('d', cls)
 keyboard.add_hotkey('[', change_region)
-keyboard.add_hotkey('shift+r', change_region, args=[True])
+keyboard.add_hotkey('shift+r', change_region, args=(True,))
 keyboard.wait()
